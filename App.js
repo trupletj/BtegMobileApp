@@ -1,24 +1,23 @@
-import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
-import { Provider } from "react-redux";
-
-import Login from "./screens/Login";
-import Home from "./screens/Home";
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { withExpoSnack } from "nativewind";
-
-const Stack = createNativeStackNavigator();
+import React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StyleSheet, StatusBar } from "react-native";
+import Navigation from "./navigation/Navigation";
+import { ProvideAuth } from "./hooks/use-auth";
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ProvideAuth>
+      <SafeAreaProvider style={styles.root}>
+        <StatusBar barStyle="dark-content" />
+        <Navigation />
+      </SafeAreaProvider>
+    </ProvideAuth>
   );
 }
-export default withExpoSnack(App);
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: "#F9FBFC",
+  },
+});
+export default App;
