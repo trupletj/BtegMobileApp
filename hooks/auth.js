@@ -68,7 +68,7 @@ function useProvideAuth() {
       setUser(response.data.user.employee);
       setToken(response.data.token);
       AsyncStorage.setItem("user", JSON.stringify(response.data.user.employee));
-      AsyncStorage.setItem("token", response.data.accessToken);
+      AsyncStorage.setItem("token", response.data.token);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

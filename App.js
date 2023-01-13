@@ -3,16 +3,16 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StyleSheet, StatusBar } from "react-native";
 import Navigation from "./navigation/Navigation";
 
-import GlobalErrorHandler from "./hooks/GlobalErrorHandler";
+import { ProvideAuth } from "./hooks/auth";
 
 function App() {
   return (
-    <GlobalErrorHandler>
+    <ProvideAuth>
       <SafeAreaProvider style={styles.root}>
         <StatusBar barStyle="dark-content" />
         <Navigation />
       </SafeAreaProvider>
-    </GlobalErrorHandler>
+    </ProvideAuth>
   );
 }
 const styles = StyleSheet.create({
