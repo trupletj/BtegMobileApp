@@ -19,7 +19,7 @@ const LoginWithUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { loginWithEmail, user, isLoading } = useAuth();
+  const { loginWithEmail, user } = useAuth();
 
   const onPressEntry = () => {
     loginWithEmail(email, password);

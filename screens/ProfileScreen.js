@@ -1,5 +1,4 @@
 import { ScrollView, Text } from "react-native";
-import QRCode from "react-native-qrcode-svg";
 import React from "react";
 import DefaultButton from "../components/DefaultButton";
 import { useAuth } from "../hooks/use-auth";
@@ -9,8 +8,6 @@ const ProfileScreen = () => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      <Text>Ner</Text>
-      <QRCode value="asdfasdfasdfsdf fdsadf dfasdf sd" />
       <Text>{user.first_name}</Text>
       <Text>{user.last_name}</Text>
       {/* <Text>{JSON.stringify(user)}</Text> */}

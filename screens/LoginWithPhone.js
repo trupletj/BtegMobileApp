@@ -23,7 +23,7 @@ const LoginWithPhone = () => {
 
   const onPressEntry = async () => {
     let response = await loginWithPhone(attendenceId, phone);
-    console.log(response.data);
+
     if (response?.data?.status) {
       if (response.data.status.variant === "success")
         navigation.navigate({
@@ -62,11 +62,7 @@ const LoginWithPhone = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
-          {isLoading ? (
-            <Text>Loading</Text>
-          ) : (
-            <DefaultButton title="Системд нэвтрэх" onPress={onPressEntry} />
-          )}
+          <DefaultButton title="Системд нэвтрэх" onPress={onPressEntry} />
           <DefaultButton
             type="SECONDARY"
             title="Бүртгэлтэй хэрэглэгч"

@@ -8,6 +8,7 @@ const DefaultTextInput = ({
   placeholder,
   keyboardType,
   iconName,
+  secureTextEntry = false,
 }) => {
   return (
     <View style={styles.container}>
@@ -18,6 +19,7 @@ const DefaultTextInput = ({
         onChangeText={onChangeText}
         style={styles.textInputStyle}
         placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );
