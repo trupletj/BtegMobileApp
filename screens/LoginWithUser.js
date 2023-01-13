@@ -8,7 +8,7 @@ import {
   Text,
 } from "react-native";
 import React, { useState } from "react";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/auth";
 
 import { useNavigation } from "@react-navigation/native";
 

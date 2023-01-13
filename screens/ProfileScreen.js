@@ -1,7 +1,7 @@
 import { ScrollView, Text } from "react-native";
 import React from "react";
 import DefaultButton from "../components/DefaultButton";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/auth";
 
 const ProfileScreen = () => {
   const { logOut, user } = useAuth();

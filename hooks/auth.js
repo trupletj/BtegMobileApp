@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import axios from "axios";
+import * as api from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { REACT_APP_BASE_URL } from "@env";
 
 const authContext = createContext();
 
@@ -38,10 +37,7 @@ function useProvideAuth() {
   const loginWithPhone = async (emp_code, phone) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        `${REACT_APP_BASE_URL}/sms/sendloginsms`,
-        { emp_code, phone }
-      );
+      const response = await api.loginWithPhone(emp_code, phone);
       setIsLoading(false);
       return response;
     } catch (error) {
@@ -53,14 +49,11 @@ function useProvideAuth() {
   const loginWithEmail = async (email, password) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        `${REACT_APP_BASE_URL}/api/auth/login`,
-        { email, password }
-      );
+      const response = await api.loginWithEmail(email, password);
       setUser(response.data.employee);
       setToken(response.data.token);
       AsyncStorage.setItem("user", JSON.stringify(response.data.employee));
-      AsyncStorage.setItem("token", response.data.token);
+      AsyncStorage.setItem("token", response.data.accessToken);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -71,14 +64,11 @@ function useProvideAuth() {
   const loginConfirmCode = async (emp_code, phone, code) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        `${REACT_APP_BASE_URL}/sms/login/phone`,
-        { emp_code, phone, code }
-      );
+      const response = await api.loginConfirmCode(emp_code, phone, code);
       setUser(response.data.user.employee);
       setToken(response.data.token);
       AsyncStorage.setItem("user", JSON.stringify(response.data.user.employee));
-      AsyncStorage.setItem("token", response.data.token);
+      AsyncStorage.setItem("token", response.data.accessToken);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -89,8 +79,7 @@ function useProvideAuth() {
   const logOut = async () => {
     try {
       setIsLoading(true);
-      await AsyncStorage.removeItem("user");
-      await AsyncStorage.removeItem("token");
+      await api.logOut();
       setUser(null);
       setToken(null);
       setIsLoading(false);
@@ -102,10 +91,7 @@ function useProvideAuth() {
 
   const checkSession = async () => {
     try {
-      const response = await axios.get(
-        `${REACT_APP_BASE_URL}/api/auth/me?is_mobile=2`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await api.checkSession(token);
       if (!response.data.valid) {
         setUser(null);
         setToken(null);

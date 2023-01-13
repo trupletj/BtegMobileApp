@@ -7,7 +7,7 @@ import {
   Keyboard,
   Text,
 } from "react-native";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/auth";
 
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";

@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/auth";
 import { useNetwork } from "../hooks/useNetwork";
 import CustomForm from "../screens/Services/Form";
 

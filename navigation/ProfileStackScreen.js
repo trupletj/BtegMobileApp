@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/auth";
 
 import LoginWithPhone from "../screens/LoginWithPhone";
 import LoginWithUser from "../screens/LoginWithUser";
