@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import * as api from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNetwork } from "./useNetwork";
 
 const authContext = createContext();
 
@@ -17,6 +18,7 @@ function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const isConnected = useNetwork();
 
   useEffect(() => {
     const getSessionFromStorage = async () => {
@@ -26,6 +28,9 @@ function useProvideAuth() {
         if (user && token) {
           setUser(JSON.parse(user));
           setToken(token);
+          if (isConnected) {
+            checkSession();
+          }
         }
       } catch (error) {
         console.error(error);
@@ -33,6 +38,13 @@ function useProvideAuth() {
     };
     getSessionFromStorage();
   }, []);
+  useEffect(() => {
+    const checkSessionInterval = setInterval(() => {
+      checkSession();
+    }, 60000); // check session every minute
+    return () => clearInterval(checkSessionInterval);
+  }, [user, token]);
+  // ...
 
   const loginWithPhone = async (emp_code, phone) => {
     try {
@@ -54,6 +66,7 @@ function useProvideAuth() {
       setToken(response.data.token);
       AsyncStorage.setItem("user", JSON.stringify(response.data.employee));
       AsyncStorage.setItem("token", response.data.accessToken);
+      AsyncStorage.setItem("hasLoggedInKey", "true");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -69,6 +82,7 @@ function useProvideAuth() {
       setToken(response.data.token);
       AsyncStorage.setItem("user", JSON.stringify(response.data.user.employee));
       AsyncStorage.setItem("token", response.data.token);
+      AsyncStorage.setItem("hasLoggedInKey", "true");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -92,7 +106,8 @@ function useProvideAuth() {
   const checkSession = async () => {
     try {
       const response = await api.checkSession(token);
-      if (!response.data.valid) {
+      if (!response.data.employee) {
+        console.log("cheching....");
         setUser(null);
         setToken(null);
         await AsyncStorage.removeItem("user");

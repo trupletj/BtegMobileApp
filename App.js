@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StyleSheet, StatusBar } from "react-native";
 import Navigation from "./navigation/Navigation";

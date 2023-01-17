@@ -12,8 +12,7 @@ import { useAuth } from "../hooks/auth";
 
 import { useNavigation } from "@react-navigation/native";
 
-import DefaultButton from "../components/DefaultButton";
-import DefaultTextInput from "../components/DefaultTextInput";
+import { DefaultButton, DefaultTextInput } from "../components";
 
 const LoginWithUser = () => {
   const [email, setEmail] = useState("");
@@ -23,6 +22,7 @@ const LoginWithUser = () => {
 
   const onPressEntry = () => {
     loginWithEmail(email, password);
+    navigation.navigate("AppStackScreen");
   };
   const onPressChangeEntryType = () => {
     navigation.navigate("LoginWithPhone");
