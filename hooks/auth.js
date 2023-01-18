@@ -106,8 +106,7 @@ function useProvideAuth() {
   const checkSession = async () => {
     try {
       const response = await api.checkSession(token);
-      if (!response.data.employee) {
-        console.log("cheching....");
+      if (!response.data?.employee) {
         setUser(null);
         setToken(null);
         await AsyncStorage.removeItem("user");

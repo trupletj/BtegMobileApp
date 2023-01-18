@@ -29,7 +29,7 @@ const Navigation = () => {
   }, []);
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasLoggedIn && (
           <Stack.Screen name="LoginStackScreen" component={LoginStackScreen} />
         )}
