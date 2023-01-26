@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { useAuth } from "../hooks/auth";
 import { useNetwork } from "../hooks/useNetwork";
-import CustomForm from "../screens/Services/Form";
+import CustomForm from "../screens/Services/CustomForm";
 
 const HomeStackScreen = () => {
   const { user } = useAuth();
@@ -15,7 +15,6 @@ const HomeStackScreen = () => {
         alignItems: "center",
       }}
     >
-      <Text>{user?.salt}</Text>
       <Text>{isConnected ? "true" : "false"}</Text>
       <CustomForm />
     </View>

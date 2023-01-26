@@ -38,13 +38,13 @@ function useProvideAuth() {
     };
     getSessionFromStorage();
   }, []);
-  useEffect(() => {
-    const checkSessionInterval = setInterval(() => {
-      checkSession();
-    }, 60000); // check session every minute
-    return () => clearInterval(checkSessionInterval);
-  }, [user, token]);
-  // ...
+
+  // useEffect(() => {
+  //   const checkSessionInterval = setInterval(() => {
+  //     checkSession();
+  //   }, 5000); // check session every minute
+  //   return () => clearInterval(checkSessionInterval);
+  // }, [user, token]);
 
   const loginWithPhone = async (emp_code, phone) => {
     try {
@@ -106,14 +106,12 @@ function useProvideAuth() {
   const checkSession = async () => {
     try {
       const response = await api.checkSession(token);
-      if (!response.data?.employee) {
-        setUser(null);
-        setToken(null);
-        await AsyncStorage.removeItem("user");
-        await AsyncStorage.removeItem("token");
+      console.log("====", response);
+      if (response.status !== "ok") {
+        logOut();
       }
     } catch (error) {
-      console.error(error);
+      console.error("check session error", error);
     }
   };
 

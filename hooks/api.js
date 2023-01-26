@@ -15,6 +15,7 @@ export const loginWithPhone = async (emp_code, phone) => {
 };
 
 export const loginWithEmail = async (email, password) => {
+  console.log("cheching base url ", REACT_APP_BASE_URL);
   try {
     const response = await axios.post(`${REACT_APP_BASE_URL}/api/auth/login`, {
       email,
@@ -50,12 +51,15 @@ export const logOut = async () => {
 
 export const checkSession = async (token) => {
   try {
+    console.log("token checking ", token);
     const response = await axios.get(
       `${REACT_APP_BASE_URL}/api/auth/me?is_mobile=2`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
     return response;
   } catch (error) {
-    console.error(error);
+    let respone = { status: "failed" };
+    return respone;
   }
 };

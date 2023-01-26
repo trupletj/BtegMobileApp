@@ -22,7 +22,7 @@ const LoginWithUser = () => {
 
   const onPressEntry = () => {
     loginWithEmail(email, password);
-    navigation.navigate("AppStackScreen");
+    navigation.navigate("AppTabScreen");
   };
   const onPressChangeEntryType = () => {
     navigation.navigate("LoginWithPhone");
