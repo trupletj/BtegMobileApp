@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import {
   IndexPath,
@@ -10,73 +10,13 @@ import {
   Select,
   SelectItem,
 } from "@ui-kitten/components";
-import { useForm, Controller, useController } from "react-hook-form";
+import { useForm, Controller, useController, set } from "react-hook-form";
 import formFields from "./formFields";
 
-const TextInput = ({ name, control, rules, label }) => {
-  const { field } = useController({
-    control,
-    defaultValue: "",
-    name,
-    rules,
-  });
-  return (
-    <Input
-      label={label}
-      onChangeText={field.onChange}
-      value={field.value}
-    ></Input>
-  );
-};
-const Checker = ({ options, control, name, label }) => {
-  const { field } = useController({
-    control,
-    defaultValue: false,
-    name,
-  });
-  const [checked, setChecked] = React.useState(false);
-  return (
-    <>
-      <CheckBox
-        label={label}
-        checked={checked}
-        onChange={(nextChecked) => {
-          setChecked(nextChecked);
-          field.onChange(nextChecked);
-        }}
-      >
-        {`Checked: ${checked}`}
-      </CheckBox>
-    </>
-  );
-};
-const Selecter = ({ options, control, name, label }) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  const { field } = useController({
-    control,
-    defaultValue: options[selectedIndex.row],
-    name,
-  });
-  return (
-    <>
-      <Select
-        selectedIndex={selectedIndex}
-        onSelect={(index) => {
-          setSelectedIndex(index);
-          field.onChange(options[selectedIndex.row]);
-        }}
-        style={{ width: "100%" }}
-        value={options[selectedIndex.row].label}
-        size="small"
-        label={label}
-      >
-        {options.map((_, i) => {
-          return <SelectItem key={i} title={_.label} value={_.value} />;
-        })}
-      </Select>
-    </>
-  );
-};
+import SelectMulti from "./components/SelectMulti";
+import Checker from "./components/Checker";
+import Selecter from "./components/Selecter";
+import TextInput from "./components/TextInput";
 
 export default () => {
   const {
@@ -104,67 +44,65 @@ export default () => {
   console.log("errors!", errors);
 
   return (
-    <Layout style={styles.container}>
+    <Layout>
       {formFields.map((field, i) => {
         switch (field.type) {
           case "text":
             return (
-              <View key={i}>
-                <TextInput
-                  label={label}
-                  name={field.name}
-                  control={control}
-                  rules={field.rules}
-                />
-                {errors[field.name] && (
-                  <Text style={styles.error}>{errors[field.name].message}</Text>
-                )}
-              </View>
+              <TextInput
+                key={i}
+                label={field.label}
+                name={field.name}
+                control={control}
+                rules={field.rules}
+                caption={errors[field.name] && errors[field.name].message}
+                status={errors[field.name] && "danger"}
+              />
             );
           case "checkbox":
             return (
-              <View key={i}>
-                <Checker
-                  label={label}
-                  options={["a", "b", "c"]}
-                  control={control}
-                  name={field.name}
-                />
-                {errors[field.name] && (
-                  <Text style={styles.error}>{errors[field.name].message}</Text>
-                )}
-              </View>
+              <Checker
+                key={i}
+                label={field.label}
+                options={["a", "b", "c"]}
+                control={control}
+                name={field.name}
+                caption={errors[field.name] && errors[field.name].message}
+                status={errors[field.name] && "danger"}
+              />
             );
           case "select":
             return (
-              <View key={i} style={styles.container}>
-                <Selecter
-                  label={field.label}
-                  options={field.options}
-                  control={control}
-                  name={field.name}
-                />
-                {errors[field.name] && (
-                  <Text style={styles.error}>{errors[field.name].message}</Text>
-                )}
-              </View>
+              <Selecter
+                key={i}
+                label={field.label}
+                options={field.options}
+                control={control}
+                name={field.name}
+                rules={field.rules}
+                caption={errors[field.name] && errors[field.name].message}
+                status={errors[field.name] && "danger"}
+              />
+            );
+          case "selectmulti":
+            return (
+              <SelectMulti
+                key={i}
+                label={field.label}
+                options={field.options}
+                control={control}
+                name={field.name}
+                rules={field.rules}
+                caption={errors[field.name] && errors[field.name].message}
+                status={errors[field.name] && "danger"}
+              />
             );
         }
       })}
 
-      <View>
-        <Button title="Button" onPress={handleSubmit(onSubmit)}>
-          Submit
-        </Button>
-      </View>
+      <Button title="Button" onPress={handleSubmit(onSubmit)}>
+        Submit
+      </Button>
     </Layout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-});
