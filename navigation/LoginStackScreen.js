@@ -2,9 +2,9 @@ import { View, Text } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import LoginWithPhone from "../screens/LoginWithPhone";
-import LoginWithUser from "../screens/LoginWithUser";
-import LoginConfirmPhone from "../screens/LoginConfirmPhone";
+import LoginWithPhone from "screens/LoginWithPhone";
+import LoginWithUser from "screens/LoginWithUser";
+import LoginConfirmPhone from "screens/LoginConfirmPhone";
 
 const Stack = createNativeStackNavigator();
 

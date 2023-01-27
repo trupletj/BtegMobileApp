@@ -44,7 +44,7 @@ export default () => {
   console.log("errors!", errors);
 
   return (
-    <Layout>
+    <Layout style={styles.container}>
       {formFields.map((field, i) => {
         switch (field.type) {
           case "text":
@@ -106,3 +106,16 @@ export default () => {
     </Layout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  },
+  layout: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

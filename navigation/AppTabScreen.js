@@ -1,13 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  BottomNavigation,
-  BottomNavigationTab,
-  Layout,
-  Text,
-} from "@ui-kitten/components";
+import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import ProfileStackScreen from "./ProfileStackScreen";
-import { View, BlurView } from "react-native";
 import HomeStackScreen from "./HomeStackScreen";
 import ServicesStackScreen from "./ServicesStackScreen";
 import RequistsStackScreen from "./RequistsStackScreen";

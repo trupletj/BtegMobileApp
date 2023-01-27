@@ -19,13 +19,16 @@ const Selecter = ({
     name,
     rules,
   });
+
+  useEffect(() => {
+    if (selectedIndex) field.onChange(options[selectedIndex.row].label);
+  }, [selectedIndex, setSelectedIndex]);
   return (
     <>
       <Select
         selectedIndex={selectedIndex}
         onSelect={(index) => {
           setSelectedIndex(index);
-          if (selectedIndex) field.onChange(options[selectedIndex.row].label);
         }}
         style={{ width: "100%" }}
         value={selectedIndex ? options[selectedIndex.row].label : null}

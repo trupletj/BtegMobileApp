@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import * as eva from "@eva-design/eva";
 import {
   ApplicationProvider,
+  IconRegistry,
   Layout,
   Text,
-  IconRegistry,
 } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { default as theme } from "./custom-theme.json";
+import { default as mapping } from "./mapping.json";
 import { StyleSheet, StatusBar } from "react-native";
 import Navigation from "./navigation/Navigation";
 
@@ -17,21 +18,16 @@ function App() {
   return (
     <ProvideAuth>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <SafeAreaProvider style={styles.root}>
-          <StatusBar barStyle="dark-content" />
-          <Navigation />
-        </SafeAreaProvider>
+      <ApplicationProvider
+        {...eva}
+        theme={{ ...eva.dark, ...theme }}
+        // customMapping={mapping}
+      >
+        <StatusBar barStyle="dark-content" />
+        <Navigation />
       </ApplicationProvider>
     </ProvideAuth>
   );
 }
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: "#F9FBFC",
-  },
-});
-export default App;
 
-//this is app
+export default App;

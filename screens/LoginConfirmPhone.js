@@ -2,21 +2,17 @@ import {
   View,
   StyleSheet,
   Text,
-  KeyboardAvoidingView,
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 import React, { useState } from "react";
-import { useAuth } from "../hooks/auth";
+import { useAuth } from "hooks/auth";
 
-import axios from "axios";
-import { REACT_APP_BASE_URL } from "@env";
 import { useNavigation } from "@react-navigation/native";
 
-import DefaultButton from "../components/DefaultButton";
-import DefaultTextInput from "../components/DefaultTextInput";
-import LoginWithPhone from "./LoginWithPhone";
+import DefaultButton from "components/DefaultButton";
+import DefaultTextInput from "components/DefaultTextInput";
 
 const LoginConfirmPhone = ({ route }) => {
   const [code, setCode] = useState("");

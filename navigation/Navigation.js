@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 
