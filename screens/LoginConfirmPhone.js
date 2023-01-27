@@ -11,8 +11,9 @@ import { useAuth } from "hooks/auth";
 
 import { useNavigation } from "@react-navigation/native";
 
-import DefaultButton from "components/DefaultButton";
-import DefaultTextInput from "components/DefaultTextInput";
+import DefaultButton from "../components/DefaultButton";
+import DefaultTextInput from "../components/DefaultTextInput";
+import LoginWithPhone from "./LoginWithPhone";
 
 const LoginConfirmPhone = ({ route }) => {
   const [code, setCode] = useState("");
