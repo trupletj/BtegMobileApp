@@ -13,6 +13,7 @@ import { StyleSheet, StatusBar } from "react-native";
 import Navigation from "./navigation/Navigation";
 
 import { ProvideAuth } from "./hooks/auth";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function App() {
   return (
@@ -23,11 +24,24 @@ function App() {
         theme={{ ...eva.dark, ...theme }}
         // customMapping={mapping}
       >
-        <StatusBar barStyle="dark-content" />
-        <Navigation />
+        <Layout style={styles.container}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="black"
+            style={{ backgriounColor: "red" }}
+          />
+
+          <Navigation />
+        </Layout>
       </ApplicationProvider>
     </ProvideAuth>
   );
 }
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

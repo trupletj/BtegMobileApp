@@ -2,12 +2,8 @@ import React from "react";
 import { useAuth } from "hooks/auth";
 import { useNetwork } from "hooks/useNetwork";
 import CustomForm from "components/Services/CustomForm";
-import {
-  ApplicationProvider,
-  IconRegistry,
-  Layout,
-  Text,
-} from "@ui-kitten/components";
+import { Layout, Text } from "@ui-kitten/components";
+import { SafeAreaView, StyleSheet } from "react-native";
 
 const HomeStackScreen = () => {
   const { user } = useAuth();
@@ -17,7 +13,6 @@ const HomeStackScreen = () => {
       style={{
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
       }}
     >
       <Text>{isConnected ? "true" : "false"}</Text>
@@ -27,3 +22,9 @@ const HomeStackScreen = () => {
 };
 
 export default HomeStackScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
