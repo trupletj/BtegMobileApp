@@ -30,9 +30,8 @@ const Selecter = ({
         onSelect={(index) => {
           setSelectedIndex(index);
         }}
-        style={{ width: "100%" }}
+        style={styles.inputStyle}
         value={selectedIndex ? options[selectedIndex.row].label : null}
-        size="small"
         label={label}
         caption={caption}
         status={status}
@@ -46,3 +45,9 @@ const Selecter = ({
 };
 
 export default Selecter;
+
+const styles = StyleSheet.create({
+  inputStyle: {
+    marginVertical: 5,
+  },
+});

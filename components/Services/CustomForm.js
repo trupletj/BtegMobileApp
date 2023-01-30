@@ -1,15 +1,6 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Alert } from "react-native";
-import {
-  IndexPath,
-  Input,
-  Button,
-  Layout,
-  Text,
-  CheckBox,
-  Select,
-  SelectItem,
-} from "@ui-kitten/components";
+import { Button, Divider, Layout } from "@ui-kitten/components";
 import { useForm, Controller, useController, set } from "react-hook-form";
 import formFields from "./formFields";
 
@@ -27,6 +18,7 @@ export default () => {
     reset,
     formState: { errors, isValid },
   } = useForm();
+
   const onSubmit = (data) => {
     console.log("this is data ", data);
   };
@@ -41,7 +33,7 @@ export default () => {
     setFormState({ ...formState, [name]: value });
   };
 
-  console.log("errors!", errors);
+  console.log("render !");
 
   return (
     <Layout style={styles.container}>
@@ -100,7 +92,12 @@ export default () => {
         }
       })}
 
-      <Button title="Button" onPress={handleSubmit(onSubmit)}>
+      <Divider style={styles.divider} />
+      <Button
+        style={styles.button}
+        title="Button"
+        onPress={handleSubmit(onSubmit)}
+      >
         Submit
       </Button>
     </Layout>
@@ -114,6 +111,8 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
   },
+  divider: { marginVertical: 5 },
+  button: { marginVertical: 5 },
   layout: {
     flex: 1,
     justifyContent: "center",

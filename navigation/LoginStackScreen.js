@@ -2,9 +2,9 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Layout, Text } from "@ui-kitten/components";
 
-import LoginWithPhone from "screens/LoginWithPhone";
-import LoginWithUser from "screens/LoginWithUser";
-import LoginConfirmPhone from "screens/LoginConfirmPhone";
+import LoginWithPhone from "screens/LoginStack/LoginWithPhone";
+import LoginWithUser from "screens/LoginStack/LoginWithUser";
+import LoginConfirmPhone from "screens/LoginStack/LoginConfirmPhone";
 
 const Stack = createNativeStackNavigator();
 

@@ -5,7 +5,7 @@ import CustomForm from "components/Services/CustomForm";
 import { Layout, Text } from "@ui-kitten/components";
 import { SafeAreaView, StyleSheet } from "react-native";
 
-const HomeStackScreen = () => {
+const HomeScreen = () => {
   const { user } = useAuth();
   const isConnected = useNetwork();
   return (
@@ -21,7 +21,7 @@ const HomeStackScreen = () => {
   );
 };
 
-export default HomeStackScreen;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {

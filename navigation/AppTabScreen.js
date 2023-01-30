@@ -4,41 +4,28 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   BottomNavigation,
   BottomNavigationTab,
-  Icon,
   Layout,
 } from "@ui-kitten/components";
-import ProfileStackScreen from "./ProfileStackScreen";
-import HomeStackScreen from "./HomeStackScreen";
-import ServicesStackScreen from "./ServicesStackScreen";
-import RequistsStackScreen from "./RequistsStackScreen";
+import HomeScreen from "screens/HomeScreen/HomeScreen";
+import { useAuth } from "hooks/auth";
+import ProfileScreen from "screens/ProfileScreen/ProfileScreen";
+import ServiceScreen from "screens/ServiceScreen/ServiceScreen";
+import RequistScreen from "screens/RequistScreen/RequistScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const BottomTabBar = ({ navigation, state }) => {
-  const CustomIcon = (props) => {
-    return <Icon {...props} />;
-  };
+  const { user } = useAuth();
+
   return (
     <BottomNavigation
       selectedIndex={state.index}
       onSelect={(index) => navigation.navigate(state.routeNames[index])}
     >
-      <BottomNavigationTab
-        title="HOME"
-        icon={<CustomIcon name="home-outline" />}
-      />
-      <BottomNavigationTab
-        title="SERVICE"
-        icon={<CustomIcon name="folder-outline" />}
-      />
-      <BottomNavigationTab
-        title="REQUIST"
-        icon={<CustomIcon name="file-text-outline" />}
-      />
-      <BottomNavigationTab
-        title="PROFILE"
-        icon={<CustomIcon name="person-outline" />}
-      />
+      <BottomNavigationTab title="HOME" />
+      <BottomNavigationTab title="SERVICE" />
+      <BottomNavigationTab title="REQUIST" />
+      <BottomNavigationTab title="PROFILE" />
     </BottomNavigation>
   );
 };
@@ -53,10 +40,10 @@ const AppTabScreen = () => {
           }}
           tabBar={(props) => <BottomTabBar {...props} />}
         >
-          <Screen name="Home" component={HomeStackScreen} />
-          <Screen name="Servie" component={ServicesStackScreen} />
-          <Screen name="Requist" component={RequistsStackScreen} />
-          <Screen name="Profile" component={ProfileStackScreen} />
+          <Screen name="Home" component={HomeScreen} />
+          <Screen name="Servie" component={ServiceScreen} />
+          <Screen name="Requist" component={RequistScreen} />
+          <Screen name="Profile" component={ProfileScreen} />
         </Navigator>
       </SafeAreaView>
     </Layout>

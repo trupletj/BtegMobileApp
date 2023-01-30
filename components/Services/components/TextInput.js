@@ -21,13 +21,20 @@ const TextInput = ({ name, control, rules, label, caption, status }) => {
   });
   return (
     <Input
+      style={styles.inputStyle}
       label={label}
       onChangeText={field.onChange}
       value={field.value}
       status={status}
       caption={caption}
-    ></Input>
+    />
   );
 };
 
 export default TextInput;
+
+const styles = StyleSheet.create({
+  inputStyle: {
+    marginVertical: 5,
+  },
+});

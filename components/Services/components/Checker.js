@@ -22,6 +22,7 @@ const Checker = ({ options, control, name, label, caption, status }) => {
   return (
     <>
       <CheckBox
+        style={styles.inputStyle}
         checked={checked}
         onChange={(nextChecked) => {
           setChecked(nextChecked);
@@ -37,3 +38,9 @@ const Checker = ({ options, control, name, label, caption, status }) => {
 };
 
 export default Checker;
+
+const styles = StyleSheet.create({
+  inputStyle: {
+    marginVertical: 5,
+  },
+});

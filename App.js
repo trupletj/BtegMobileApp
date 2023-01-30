@@ -25,11 +25,7 @@ function App() {
         // customMapping={mapping}
       >
         <Layout style={styles.container}>
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="black"
-            style={{ backgriounColor: "red" }}
-          />
+          <StatusBar barStyle="light-content" backgroundColor="black" />
 
           <Navigation />
         </Layout>

@@ -1,0 +1,22 @@
+[
+  {
+    "department": "hab",
+    "name": "ХАБЭА",
+    "id": 123,
+    "sub_services": [
+      {
+        "name": "hab_huudas",
+        "id": "789",
+        "title": "Аюулыг мэдээлэх хуудас",
+        "type": "customForm"
+      },
+      {
+        "name": "hab_huudas",
+        "id": "112",
+        "title": "A",
+        "type": "customForm"
+      }
+    ]
+  },
+  { "department": "hr", "name": "ХҮНИЙ НӨӨЦ", "id": 456 }
+]

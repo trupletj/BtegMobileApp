@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Select, SelectItem } from "@ui-kitten/components";
 import { useController } from "react-hook-form";
+import { StyleSheet } from "react-native";
 
 const SelectMulti = ({
   options,
@@ -44,8 +45,7 @@ const SelectMulti = ({
         onSelect={(index) => {
           setSelectedIndex(index);
         }}
-        style={{ width: "100%" }}
-        size="small"
+        style={styles.inputStyle}
         label={label}
         onBlur={handleOnBlur}
         value={value}
@@ -61,3 +61,9 @@ const SelectMulti = ({
 };
 
 export default SelectMulti;
+
+const styles = StyleSheet.create({
+  inputStyle: {
+    marginVertical: 5,
+  },
+});
