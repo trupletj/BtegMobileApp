@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView } from "react-native";
 import { WebView } from "react-native-webview";
 import React from "react";
 
-const RequistScreen = () => {
+const WebViewScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <WebView source={{ uri: "https://anket.bteg.mn/" }} />
@@ -10,4 +10,4 @@ const RequistScreen = () => {
   );
 };
 
-export default RequistScreen;
+export default WebViewScreen;

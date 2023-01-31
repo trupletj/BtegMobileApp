@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
-import { useAuth } from "../../hooks/auth";
+import { useAuth } from "../../hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
 import {
   Button,
@@ -49,7 +49,7 @@ const ProfileScreen = () => {
         <ScrollView style={{ flex: 1 }}>
           <Button
             style={styles.buttonStyle}
-            onPress={() => navigation.navigate("LoginStackScreen")}
+            onPress={() => navigation.navigate("LoginWithPhone")}
           >
             Login
           </Button>

@@ -1,13 +1,16 @@
 import React from "react";
-import { useAuth } from "hooks/auth";
+import { useAuth } from "hooks/useAuth";
 import { useNetwork } from "hooks/useNetwork";
 import CustomForm from "components/Services/CustomForm";
 import { Layout, Text } from "@ui-kitten/components";
 import { SafeAreaView, StyleSheet } from "react-native";
+import { useAppState } from "hooks/useAppState";
 
 const HomeScreen = () => {
   const { user } = useAuth();
+  const { isReady } = useAppState();
   const isConnected = useNetwork();
+
   return (
     <Layout
       style={{

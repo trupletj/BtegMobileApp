@@ -1,24 +1,21 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import * as api from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNetwork } from "./useNetwork";
+import { useNetwork } from "hooks/useNetwork";
+import * as api from "./api";
 
-const authContext = createContext();
+export const authContext = createContext();
 
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 
-export const useAuth = () => {
-  return useContext(authContext);
-};
-
 function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const isConnected = useNetwork();
+  const [hasLoggedIn, setHasLoggedIn] = useState(false);
 
   useEffect(() => {
     const getSessionFromStorage = async () => {
@@ -36,7 +33,21 @@ function useProvideAuth() {
         console.error(error);
       }
     };
+
+    const checkIfHasLoggedIn = async () => {
+      try {
+        const value = await AsyncStorage.getItem("hasLoggedInKey");
+        if (value === null) {
+          setHasLoggedIn(false);
+        } else {
+          setHasLoggedIn(true);
+        }
+      } catch (error) {
+        console.log("Error getting data from storage: ", error);
+      }
+    };
     getSessionFromStorage();
+    checkIfHasLoggedIn();
   }, []);
 
   // useEffect(() => {
@@ -124,5 +135,6 @@ function useProvideAuth() {
     loginConfirmCode,
     logOut,
     checkSession,
+    hasLoggedIn,
   };
 }

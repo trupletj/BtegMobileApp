@@ -10,7 +10,7 @@ import { Layout, Text, Input, Button, Divider } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 
 import React, { useState } from "react";
-import { useAuth } from "hooks/auth";
+import { useAuth } from "hooks/useAuth";
 
 import { useNavigation } from "@react-navigation/native";
 

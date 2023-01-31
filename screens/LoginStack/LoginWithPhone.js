@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Layout, Text, Input, Button, Divider } from "@ui-kitten/components";
 
-import { useAuth } from "hooks/auth";
+import { useAuth } from "hooks/useAuth";
 
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";

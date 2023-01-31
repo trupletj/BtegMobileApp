@@ -14,7 +14,7 @@ import {
   Divider,
 } from "@ui-kitten/components";
 import React, { useState } from "react";
-import { useAuth } from "hooks/auth";
+import { useAuth } from "hooks/useAuth";
 import { AntDesign } from "@expo/vector-icons";
 
 import { useNavigation } from "@react-navigation/native";

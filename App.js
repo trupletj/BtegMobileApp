@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet } from "react-native";
+//theme
 import * as eva from "@eva-design/eva";
 import {
   ApplicationProvider,
@@ -9,35 +11,28 @@ import {
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { default as theme } from "./custom-theme.json";
 import { default as mapping } from "./mapping.json";
-import { StyleSheet, StatusBar } from "react-native";
+//components
 import Navigation from "./navigation/Navigation";
-
-import { ProvideAuth } from "./hooks/auth";
-import { SafeAreaView } from "react-native-safe-area-context";
+//context
+import { ProvideAuth } from "context/UserContext";
+import { ProvideAppState } from "context/AppStateContext";
+//hook
 
 function App() {
   return (
     <ProvideAuth>
-      <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider
-        {...eva}
-        theme={{ ...eva.dark, ...theme }}
-        // customMapping={mapping}
-      >
-        <Layout style={styles.container}>
-          <StatusBar barStyle="light-content" backgroundColor="black" />
-
+      <ProvideAppState>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider
+          {...eva}
+          theme={{ ...eva.dark, ...theme }}
+          // customMapping={mapping}
+        >
           <Navigation />
-        </Layout>
-      </ApplicationProvider>
+        </ApplicationProvider>
+      </ProvideAppState>
     </ProvideAuth>
   );
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

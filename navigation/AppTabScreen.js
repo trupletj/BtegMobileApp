@@ -7,7 +7,7 @@ import {
   Layout,
 } from "@ui-kitten/components";
 import HomeScreen from "screens/HomeScreen/HomeScreen";
-import { useAuth } from "hooks/auth";
+import { useAuth } from "hooks/useAuth";
 import ProfileScreen from "screens/ProfileScreen/ProfileScreen";
 import ServiceScreen from "screens/ServiceScreen/ServiceScreen";
 import RequistScreen from "screens/RequistScreen/RequistScreen";
