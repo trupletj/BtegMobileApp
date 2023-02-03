@@ -2,6 +2,7 @@ import axios from "axios";
 import { REACT_APP_BASE_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+//login
 export const loginWithPhone = async (emp_code, phone) => {
   try {
     const response = await axios.post(
@@ -15,7 +16,6 @@ export const loginWithPhone = async (emp_code, phone) => {
 };
 
 export const loginWithEmail = async (email, password) => {
-  console.log("cheching base url ", REACT_APP_BASE_URL);
   try {
     const response = await axios.post(`${REACT_APP_BASE_URL}/api/auth/login`, {
       email,
@@ -60,5 +60,43 @@ export const checkSession = async (token) => {
   } catch (error) {
     let respone = { status: "failed" };
     return respone;
+  }
+};
+
+//App data
+const data = {
+  prefix: "custom",
+  getAllData: 1,
+  modelName:
+    "Frontend\\Plugins\\ApplicationService\\ApplicationServiceCategory",
+  relations: [],
+  select: "*",
+  filters: [],
+  orders: [{ field_name: "id", order_type: "desc" }],
+  globalSearch: [],
+};
+
+export const fetchData = async (data, token) => {
+  try {
+    const response = await axios({
+      method: "POST",
+      // url: `${REACT_APP_BASE_URL}/api/custom/list`,
+      url: `${REACT_APP_BASE_URL}/api/custom/list`,
+      data,
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(function (response) {
+        return response;
+      })
+      .catch(function (error) {
+        console.error("there is error", error);
+      });
+
+    return response;
+  } catch (error) {
+    console.error(error);
   }
 };

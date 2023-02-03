@@ -47,15 +47,16 @@ function useProvideAuth() {
       }
     };
     getSessionFromStorage();
-    checkIfHasLoggedIn();
+    // checkIfHasLoggedIn();
   }, []);
 
-  // useEffect(() => {
-  //   const checkSessionInterval = setInterval(() => {
-  //     checkSession();
-  //   }, 5000); // check session every minute
-  //   return () => clearInterval(checkSessionInterval);
-  // }, [user, token]);
+  useEffect(() => {
+    const checkSessionInterval = setInterval(() => {
+      if (token && user && isConnected) checkSession();
+      console.log("hi");
+    }, 1000 * 60 * 30); // check session every minute
+    return () => clearInterval(checkSessionInterval);
+  }, [user, token]);
 
   const loginWithPhone = async (emp_code, phone) => {
     try {
@@ -73,11 +74,15 @@ function useProvideAuth() {
     try {
       setIsLoading(true);
       const response = await api.loginWithEmail(email, password);
+
       setUser(response.data.employee);
-      setToken(response.data.token);
-      AsyncStorage.setItem("user", JSON.stringify(response.data.employee));
-      AsyncStorage.setItem("token", response.data.accessToken);
-      AsyncStorage.setItem("hasLoggedInKey", "true");
+      setToken(response.data.accessToken);
+      await AsyncStorage.setItem(
+        "user",
+        JSON.stringify(response.data.employee)
+      );
+      await AsyncStorage.setItem("token", response.data.accessToken);
+
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -91,9 +96,11 @@ function useProvideAuth() {
       const response = await api.loginConfirmCode(emp_code, phone, code);
       setUser(response.data.user.employee);
       setToken(response.data.token);
-      AsyncStorage.setItem("user", JSON.stringify(response.data.user.employee));
-      AsyncStorage.setItem("token", response.data.token);
-      AsyncStorage.setItem("hasLoggedInKey", "true");
+      await AsyncStorage.setItem(
+        "user",
+        JSON.stringify(response.data.user.employee)
+      );
+      await AsyncStorage.setItem("token", response.data.token);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -117,8 +124,8 @@ function useProvideAuth() {
   const checkSession = async () => {
     try {
       const response = await api.checkSession(token);
-      console.log("====", response);
-      if (response.status !== "ok") {
+      console.log("==status==", response.status);
+      if (response.status !== 200) {
         logOut();
       }
     } catch (error) {

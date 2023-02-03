@@ -4,9 +4,9 @@ import React from "react";
 
 const RequistScreen = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <WebView source={{ uri: "https://anket.bteg.mn/" }} />
-    </SafeAreaView>
+    <View>
+      <Text>Requist Screen</Text>
+    </View>
   );
 };
 

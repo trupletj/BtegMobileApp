@@ -13,6 +13,7 @@ import { useAuth } from "hooks/useAuth";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
+import globals from "constants/globals";
 
 const LoginWithPhone = () => {
   const [phone, setPhone] = useState("");
@@ -51,7 +52,11 @@ const LoginWithPhone = () => {
             placeholder="Цаг бүртгэлийн дугаар"
             keyboardType="number-pad"
             accessoryLeft={() => (
-              <AntDesign name="idcard" size={24} color="#FF6721" />
+              <AntDesign
+                name="idcard"
+                size={24}
+                color={globals.COLOR.PRIMARY}
+              />
             )}
           />
           <Input
@@ -60,7 +65,7 @@ const LoginWithPhone = () => {
             placeholder="Утасны дугаар"
             keyboardType="number-pad"
             accessoryLeft={() => (
-              <AntDesign name="phone" size={24} color="#FF6721" />
+              <AntDesign name="phone" size={24} color={globals.COLOR.PRIMARY} />
             )}
           />
           <Divider style={{ marginTop: 10 }} />
@@ -71,6 +76,7 @@ const LoginWithPhone = () => {
             style={styles.buttonStyle}
             onPress={onPressChangeEntryType}
             appearance="ghost"
+            status="basic"
           >
             Бүртгэлэй хэрэглэгч
           </Button>

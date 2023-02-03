@@ -16,6 +16,7 @@ import {
 import React, { useState } from "react";
 import { useAuth } from "hooks/useAuth";
 import { AntDesign } from "@expo/vector-icons";
+import globals from "constants/globals";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -43,7 +44,11 @@ const LoginConfirmPhone = ({ route }) => {
             placeholder="Утсанд илгээсэн код"
             keyboardType="number-pad"
             accessoryLeft={() => (
-              <AntDesign name="message1" size={24} color="#FF6721" />
+              <AntDesign
+                name="message1"
+                size={24}
+                color={globals.COLOR.PRIMARY}
+              />
             )}
           />
           <Divider style={{ marginTop: 10 }} />

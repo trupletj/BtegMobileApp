@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { useAuth } from "hooks/useAuth";
 
 import { useNavigation } from "@react-navigation/native";
-
+import globals from "constants/globals";
 const LoginWithUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +22,6 @@ const LoginWithUser = () => {
 
   const onPressEntry = () => {
     loginWithEmail(email, password);
-    navigation.navigate("AppTabScreen");
   };
   const onPressChangeEntryType = () => {
     navigation.navigate("LoginWithPhone");
@@ -30,7 +29,7 @@ const LoginWithUser = () => {
   return (
     <Layout style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView behavior="padding">
           <View style={styles.logoContainer}>
             <Image style={styles.logo} source={require("assets/logo.png")} />
           </View>
@@ -41,7 +40,7 @@ const LoginWithUser = () => {
             placeholder="E-Mail"
             keyboardType="email-address"
             accessoryLeft={() => (
-              <AntDesign name="mail" size={24} color="#FF6721" />
+              <AntDesign name="mail" size={24} color={globals.COLOR.PRIMARY} />
             )}
           />
           <Input
@@ -52,7 +51,7 @@ const LoginWithUser = () => {
             keyboardType="default"
             secureTextEntry={true}
             accessoryLeft={() => (
-              <AntDesign name="lock" size={24} color="#FF6721" />
+              <AntDesign name="lock" size={24} color={globals.COLOR.PRIMARY} />
             )}
           />
           <Divider style={{ marginTop: 10 }} />
@@ -63,6 +62,7 @@ const LoginWithUser = () => {
             style={styles.buttonStyle}
             onPress={onPressChangeEntryType}
             appearance="ghost"
+            status="basic"
           >
             Кодоор нэвтрэх
           </Button>

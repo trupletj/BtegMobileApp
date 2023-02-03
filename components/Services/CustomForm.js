@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button, Divider, Layout } from "@ui-kitten/components";
 import { useForm, Controller, useController, set } from "react-hook-form";
@@ -32,8 +32,6 @@ export default () => {
     setValue(name, value);
     setFormState({ ...formState, [name]: value });
   };
-
-  console.log("render !");
 
   return (
     <Layout style={styles.container}>

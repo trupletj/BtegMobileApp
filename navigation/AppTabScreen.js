@@ -1,16 +1,30 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
+//Contexts
+import { ProvideAppState } from "context/AppStateContext";
 import {
   BottomNavigation,
   BottomNavigationTab,
   Layout,
+  TopNavigation,
+  Text,
+  Avatar,
+  TopNavigationAction,
 } from "@ui-kitten/components";
-import HomeScreen from "screens/HomeScreen/HomeScreen";
+import { MaterialIcons, Octicons } from "@expo/vector-icons";
+
+//hook
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "hooks/useAuth";
+//screens
+import HomeScreen from "screens/HomeScreen/HomeScreen";
 import ProfileScreen from "screens/ProfileScreen/ProfileScreen";
 import ServiceScreen from "screens/ServiceScreen/ServiceScreen";
 import RequistScreen from "screens/RequistScreen/RequistScreen";
+import globals from "constants/globals";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -18,36 +32,119 @@ const BottomTabBar = ({ navigation, state }) => {
   const { user } = useAuth();
 
   return (
-    <BottomNavigation
-      selectedIndex={state.index}
-      onSelect={(index) => navigation.navigate(state.routeNames[index])}
-    >
-      <BottomNavigationTab title="HOME" />
-      <BottomNavigationTab title="SERVICE" />
-      <BottomNavigationTab title="REQUIST" />
-      <BottomNavigationTab title="PROFILE" />
-    </BottomNavigation>
+    <View style={{ position: "relative" }}>
+      <View
+        style={{
+          position: "absolute",
+          alignSelf: "center",
+          bottom: 30,
+          backgroundColor: globals.COLOR.PRIMARY,
+          zIndex: 2,
+          padding: 5,
+          borderRadius: 10,
+        }}
+      >
+        <TouchableOpacity>
+          <MaterialIcons name="qr-code-2" size={36} color="white" />
+        </TouchableOpacity>
+      </View>
+      <Layout>
+        <BottomNavigation
+          selectedIndex={state.index}
+          onSelect={(index) => navigation.navigate(state.routeNames[index])}
+        >
+          <BottomNavigationTab
+            title={() => (
+              <Octicons
+                name="apps"
+                size={24}
+                color={state.index === 0 ? globals.COLOR.PRIMARY : "gray"}
+              />
+            )}
+          />
+
+          <BottomNavigationTab
+            title={() => (
+              <Octicons
+                name="checklist"
+                size={26}
+                color={state.index === 1 ? globals.COLOR.PRIMARY : "gray"}
+              />
+            )}
+          />
+
+          {/* <BottomNavigationTab title="REQUIST" />
+      <BottomNavigationTab title="PROFILE" /> */}
+        </BottomNavigation>
+      </Layout>
+    </View>
   );
 };
 
+const EditIcon = (props) => (
+  <MaterialIcons
+    name="notifications-none"
+    size={24}
+    color={globals.COLOR.PRIMARY}
+  />
+);
+
 const AppTabScreen = () => {
+  const { user } = useAuth();
+  const navigation = useNavigation();
+
+  const renderTitle = (props) => (
+    <TouchableOpacity
+      style={styles.titleContainer}
+      onPress={() => navigation.navigate("ProfileScreen")}
+    >
+      <Avatar style={styles.logo} source={require("assets/avatar.png")} />
+      <Text {...props} style={{ fontWeight: "bold", fontSize: 16 }}>
+        {user.last_name.charAt(0)}
+        {"."}
+        {user.first_name}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  const renderRightActions = () => <TopNavigationAction icon={EditIcon} />;
   return (
-    <Layout style={{ flex: 1 }}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          tabBar={(props) => <BottomTabBar {...props} />}
-        >
-          <Screen name="Home" component={HomeScreen} />
-          <Screen name="Servie" component={ServiceScreen} />
-          <Screen name="Requist" component={RequistScreen} />
-          <Screen name="Profile" component={ProfileScreen} />
-        </Navigator>
-      </SafeAreaView>
-    </Layout>
+    <ProvideAppState>
+      <Layout style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Layout level="1" style={{ paddingVertical: 5 }}>
+            <TopNavigation
+              title={renderTitle}
+              // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
+              accessoryRight={renderRightActions}
+            />
+          </Layout>
+          <Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+            tabBar={(props) => <BottomTabBar {...props} />}
+          >
+            <Screen name="Service" component={ServiceScreen} />
+            <Screen name="Requist" component={RequistScreen} />
+            {/* <Screen name="Home" component={HomeScreen} /> */}
+            {/*   
+          <Screen name="Profile" component={ProfileScreen} /> */}
+          </Navigator>
+        </SafeAreaView>
+      </Layout>
+    </ProvideAppState>
   );
 };
 
 export default AppTabScreen;
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  logo: {
+    marginHorizontal: 16,
+  },
+});

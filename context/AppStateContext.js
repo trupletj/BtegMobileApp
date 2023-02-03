@@ -1,58 +1,114 @@
-import React, { useState, useEffect, createContext, useCallback } from "react";
-import * as SplashScreen from "expo-splash-screen";
+import React, { useState, useEffect, createContext } from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNetwork } from "hooks/useNetwork";
 import * as api from "./api";
-
+import { useAuth } from "../hooks/useAuth";
 export const AppStateContext = createContext();
 
-//splash screen tool
-SplashScreen.preventAutoHideAsync();
+const data = {
+  prefix: "custom",
+  getAllData: "1",
 
-export function ProvideAppState({ children }) {
-  const state = useProvideAppState();
+  relations: [],
+  select: "*",
+  filters: [],
+  orders: [{ field_name: "id", order_type: "desc" }],
+  globalSearch: [],
+  tableName: "application_service_category",
+  dataloaded: 0,
+};
+const initialState = {
+  categories: [],
+  services: [],
+};
+
+export const ProvideAppState = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [services, setServices] = useState([]);
+  const [error, setError] = useState();
+  const isConnected = useNetwork();
+
+  const { token } = useAuth();
+  useEffect(() => {
+    const getStateFromStorage = async () => {
+      setIsLoading(true);
+      try {
+        const categories = await AsyncStorage.getItem("categories");
+        // const services = await AsyncStorage.getItem("services");
+
+        if (categories) {
+          setCategories(JSON.parse(categories));
+          // setCategories(JSON.parse(services));
+          setIsLoading(false);
+        } else {
+          console.log("ASYNC CHECKING 2");
+
+          await getCategories(data, token);
+          // await getServices(token, data);
+
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setError(error);
+        setIsLoading(false);
+      }
+    };
+
+    getStateFromStorage();
+  }, []);
+
+  const getCategories = async (dd, token) => {
+    const data = {
+      ...dd,
+      modelName:
+        "Frontend\\Plugins\\ApplicationService\\ApplicationServiceCategory",
+    };
+    try {
+      setIsLoading(true);
+      const response = await api.fetchData(data, token);
+      console.log(response.data.records.data);
+      setCategories(response.data.records.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+  const getServices = async (token, dd) => {
+    const data = {
+      ...dd,
+      modelName: "Frontend\\Plugins\\ApplicationService\\ApplicationService",
+    };
+    try {
+      setIsLoading(true);
+      const response = await api.fetchData(token, data);
+      setServices(response.data.records.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+  const checkUpdate = async () => {
+    console.log("Im checking update ....");
+  };
+
   return (
-    <AppStateContext.Provider value={state}>
+    <AppStateContext.Provider
+      value={{
+        categories,
+        // services,
+        isLoading,
+      }}
+    >
       {children}
     </AppStateContext.Provider>
   );
-}
+};
 
-function useProvideAppState() {
-  const [appIsReady, setAppIsReady] = useState(false);
-
-  useEffect(() => {
-    async function prepare() {
-      try {
-        // Pre-load fonts, make any API calls you need to do here
-        // await Font.loadAsync(Entypo.font);
-        // Artificially delay for two seconds to simulate a slow loading
-        // experience. Please remove this if you copy and paste the code!
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        // Tell the application to render
-        setAppIsReady(true);
-      }
-    }
-
-    prepare();
-  }, []);
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
-  return {
-    appIsReady,
-    setAppIsReady,
-    onLayoutRootView,
-  };
-}
+export default AppStateContext;

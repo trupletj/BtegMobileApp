@@ -13,9 +13,8 @@ import {
 } from "@ui-kitten/components";
 
 const ProfileScreen = () => {
-  const { logOut, user } = useAuth();
+  const { logOut, user, token } = useAuth();
   const navigation = useNavigation();
-  console.log(user);
   if (user)
     return (
       <Layout style={styles.container}>
@@ -30,6 +29,8 @@ const ProfileScreen = () => {
           <ListItem title="ХЭЛТЭС" description={user.heltes_name} />
           <Divider />
           <ListItem title="АЛБА" description={user.department_name} />
+          <Divider />
+          <ListItem title="TOKEN" description={token} />
           <Divider />
 
           <Button
