@@ -53,7 +53,6 @@ function useProvideAuth() {
   useEffect(() => {
     const checkSessionInterval = setInterval(() => {
       if (token && user && isConnected) checkSession();
-      console.log("hi");
     }, 1000 * 60 * 30); // check session every minute
     return () => clearInterval(checkSessionInterval);
   }, [user, token]);
@@ -75,6 +74,7 @@ function useProvideAuth() {
       setIsLoading(true);
       const response = await api.loginWithEmail(email, password);
 
+      debugger;
       setUser(response.data.employee);
       setToken(response.data.accessToken);
       await AsyncStorage.setItem(
@@ -86,7 +86,10 @@ function useProvideAuth() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.error(error);
+      console.error(
+        "eroooooooooooooooooooooooooooooooooooooooooooooooor",
+        error
+      );
     }
   };
 

@@ -17,10 +17,14 @@ export const loginWithPhone = async (emp_code, phone) => {
 
 export const loginWithEmail = async (email, password) => {
   try {
-    const response = await axios.post(`${REACT_APP_BASE_URL}/api/auth/login`, {
-      email,
-      password,
-    });
+    const response = await axios.post(
+      `${REACT_APP_BASE_URL}/api/auth/login?is_mobile=2`,
+      {
+        email,
+        password,
+      }
+    );
+    debugger;
     return response;
   } catch (error) {
     console.error(error);
