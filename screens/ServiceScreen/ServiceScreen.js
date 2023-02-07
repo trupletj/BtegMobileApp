@@ -1,9 +1,14 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import { Card, Layout, List, Text } from "@ui-kitten/components";
-import Category from "../../components/Categories/Category";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import ServiceList from "../../components/Services/ServiceList";
+//Navigation
+
+//Screens
+
+//Components
+import Category from "components/Categories/Category";
+import SearchBar from "components/SearchBar/SearchBar";
+import ServiceList from "components/Services/ServiceList";
 const ServiceScreen = () => {
   return (
     <Layout style={styles.container} level="4">

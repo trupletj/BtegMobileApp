@@ -8,11 +8,13 @@ import { default as theme } from "./custom-theme.json";
 import Navigation from "./navigation/Navigation";
 //context
 import { ProvideAuth } from "context/UserContext";
+//navigations
+import "react-native-gesture-handler";
 
 function App() {
   return (
     <ProvideAuth>
-      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+      <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
         <Navigation />
       </ApplicationProvider>
     </ProvideAuth>

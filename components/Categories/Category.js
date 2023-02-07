@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import {
   Layout,
   List,
@@ -22,9 +22,10 @@ const Category = () => {
         {categories &&
           categories.map((_, i) => {
             return (
-              <Card key={i} style={styles.card} status="primary">
-                <Text>{_.name}</Text>
-              </Card>
+              <View key={i} style={styles.category}>
+                <Card style={styles.card} status="primary"></Card>
+                <Text category="label">{_.name}</Text>
+              </View>
             );
           })}
       </ScrollView>
@@ -41,6 +42,12 @@ const styles = StyleSheet.create({
   },
   card: {
     margin: 2,
-    width: 150,
+    borderRadius: 50,
+  },
+  category: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 2,
   },
 });

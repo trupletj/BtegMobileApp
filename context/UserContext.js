@@ -73,17 +73,31 @@ function useProvideAuth() {
     try {
       setIsLoading(true);
       const response = await api.loginWithEmail(email, password);
+      if (response.data.employee && response.data.accessToken) {
+        setUser(response.data.employee);
+        setToken(response.data.accessToken);
+        await AsyncStorage.setItem(
+          "user",
+          JSON.stringify(response.data.employee)
+        );
+        await AsyncStorage.setItem("token", response.data.accessToken);
 
-      debugger;
-      setUser(response.data.employee);
-      setToken(response.data.accessToken);
-      await AsyncStorage.setItem(
-        "user",
-        JSON.stringify(response.data.employee)
-      );
-      await AsyncStorage.setItem("token", response.data.accessToken);
+        setIsLoading(false);
+      } else {
+        let characters = response.data;
+        if (typeof characters === "string") {
+          characters += "}";
+          const data = JSON.parse(characters);
+          setUser(data.employee);
+          setToken(data.accessToken);
+          await AsyncStorage.setItem("user", JSON.stringify(data.employee));
+          await AsyncStorage.setItem("token", accessToken);
 
-      setIsLoading(false);
+          setIsLoading(false);
+        }
+        // if (characters.charAt(characters.length - 1) !== "}") characters += "}";
+        // console.log(JSON.parse(characters));
+      }
     } catch (error) {
       setIsLoading(false);
       console.error(

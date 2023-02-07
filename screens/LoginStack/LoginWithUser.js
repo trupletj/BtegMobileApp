@@ -29,44 +29,59 @@ const LoginWithUser = () => {
   return (
     <Layout style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView behavior="padding">
-          <View style={styles.logoContainer}>
-            <Image style={styles.logo} source={require("assets/logo.png")} />
-          </View>
-          <Input
-            style={styles.inputStyle}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="E-Mail"
-            keyboardType="email-address"
-            accessoryLeft={() => (
-              <AntDesign name="mail" size={24} color={globals.COLOR.PRIMARY} />
-            )}
-          />
-          <Input
-            style={styles.inputStyle}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-            keyboardType="default"
-            secureTextEntry={true}
-            accessoryLeft={() => (
-              <AntDesign name="lock" size={24} color={globals.COLOR.PRIMARY} />
-            )}
-          />
-          <Divider style={{ marginTop: 10 }} />
-          <Button style={styles.buttonStyle} onPress={onPressEntry}>
-            Нэвтрэх
-          </Button>
-          <Button
-            style={styles.buttonStyle}
-            onPress={onPressChangeEntryType}
-            appearance="ghost"
-            status="basic"
-          >
-            Кодоор нэвтрэх
-          </Button>
-        </KeyboardAvoidingView>
+        <Layout style={styles.container2}>
+          <Layout>
+            <View style={styles.logoContainer}>
+              <Text category="h2">Нэвтрэх</Text>
+            </View>
+            <Input
+              style={styles.inputStyle}
+              onChangeText={setEmail}
+              value={email}
+              placeholder="E-Mail"
+              keyboardType="email-address"
+              accessoryLeft={() => (
+                <AntDesign
+                  name="mail"
+                  size={24}
+                  color={globals.COLOR.PRIMARY}
+                />
+              )}
+            />
+            <Input
+              style={styles.inputStyle}
+              onChangeText={setPassword}
+              value={password}
+              placeholder="Password"
+              keyboardType="default"
+              secureTextEntry={true}
+              accessoryLeft={() => (
+                <AntDesign
+                  name="lock"
+                  size={24}
+                  color={globals.COLOR.PRIMARY}
+                />
+              )}
+            />
+          </Layout>
+          <Layout>
+            <Button
+              style={styles.buttonStyle}
+              onPress={onPressEntry}
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner status="basic" /> : "Нэвтрэх"}
+            </Button>
+            <Button
+              style={styles.buttonStyle}
+              onPress={onPressChangeEntryType}
+              appearance="ghost"
+              status="basic"
+            >
+              Кодоор нэвтрэх
+            </Button>
+          </Layout>
+        </Layout>
       </TouchableWithoutFeedback>
     </Layout>
   );
@@ -75,7 +90,13 @@ const LoginWithUser = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    width: "100%",
+    padding: 10,
+  },
+  container2: {
+    flex: 1,
+    justifyContent: "space-between",
+    height: "100%",
     flexDirection: "column",
     width: "100%",
     padding: 10,

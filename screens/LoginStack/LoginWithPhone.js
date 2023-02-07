@@ -6,7 +6,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Layout, Text, Input, Button, Divider } from "@ui-kitten/components";
+import {
+  Layout,
+  Text,
+  Input,
+  Button,
+  Divider,
+  Spinner,
+} from "@ui-kitten/components";
 
 import { useAuth } from "hooks/useAuth";
 
@@ -42,45 +49,56 @@ const LoginWithPhone = () => {
   return (
     <Layout style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView behavior="padding">
-          <View style={styles.logoContainer}>
-            <Image style={styles.logo} source={require("assets/logo.png")} />
-          </View>
-          <Input
-            style={styles.inputStyle}
-            onChangeText={setAttendenceId}
-            placeholder="Цаг бүртгэлийн дугаар"
-            keyboardType="number-pad"
-            accessoryLeft={() => (
-              <AntDesign
-                name="idcard"
-                size={24}
-                color={globals.COLOR.PRIMARY}
-              />
-            )}
-          />
-          <Input
-            style={styles.inputStyle}
-            onChangeText={setPhone}
-            placeholder="Утасны дугаар"
-            keyboardType="number-pad"
-            accessoryLeft={() => (
-              <AntDesign name="phone" size={24} color={globals.COLOR.PRIMARY} />
-            )}
-          />
-          <Divider style={{ marginTop: 10 }} />
-          <Button style={styles.buttonStyle} onPress={onPressEntry}>
-            Нэвтрэх
-          </Button>
-          <Button
-            style={styles.buttonStyle}
-            onPress={onPressChangeEntryType}
-            appearance="ghost"
-            status="basic"
-          >
-            Бүртгэлэй хэрэглэгч
-          </Button>
-        </KeyboardAvoidingView>
+        <Layout style={styles.container2}>
+          <Layout>
+            <View style={styles.logoContainer}>
+              <Text category="h2">Нэвтрэх</Text>
+            </View>
+            <Input
+              style={styles.inputStyle}
+              onChangeText={setAttendenceId}
+              placeholder="Цаг бүртгэлийн дугаар"
+              keyboardType="number-pad"
+              accessoryLeft={() => (
+                <AntDesign
+                  name="idcard"
+                  size={24}
+                  color={globals.COLOR.PRIMARY}
+                />
+              )}
+            />
+            <Input
+              style={styles.inputStyle}
+              onChangeText={setPhone}
+              placeholder="Утасны дугаар"
+              keyboardType="number-pad"
+              accessoryLeft={() => (
+                <AntDesign
+                  name="phone"
+                  size={24}
+                  color={globals.COLOR.PRIMARY}
+                />
+              )}
+            />
+          </Layout>
+          <Layout>
+            <Button
+              style={styles.buttonStyle}
+              onPress={onPressEntry}
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner status="basic" /> : "Нэвтрэх"}
+            </Button>
+            <Button
+              style={styles.buttonStyle}
+              onPress={onPressChangeEntryType}
+              appearance="ghost"
+              status="basic"
+            >
+              Бүртгэлэй хэрэглэгч
+            </Button>
+          </Layout>
+        </Layout>
       </TouchableWithoutFeedback>
     </Layout>
   );
@@ -89,7 +107,13 @@ const LoginWithPhone = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    width: "100%",
+    padding: 10,
+  },
+  container2: {
+    flex: 1,
+    justifyContent: "space-between",
+    height: "100%",
     flexDirection: "column",
     width: "100%",
     padding: 10,

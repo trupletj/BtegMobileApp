@@ -24,7 +24,6 @@ export const loginWithEmail = async (email, password) => {
         password,
       }
     );
-    debugger;
     return response;
   } catch (error) {
     console.error(error);
@@ -68,17 +67,6 @@ export const checkSession = async (token) => {
 };
 
 //App data
-const data = {
-  prefix: "custom",
-  getAllData: 1,
-  modelName:
-    "Frontend\\Plugins\\ApplicationService\\ApplicationServiceCategory",
-  relations: [],
-  select: "*",
-  filters: [],
-  orders: [{ field_name: "id", order_type: "desc" }],
-  globalSearch: [],
-};
 
 export const fetchData = async (data, token) => {
   try {

@@ -19,7 +19,7 @@ const ProfileScreen = () => {
     return (
       <Layout style={styles.container}>
         <ScrollView style={{ flex: 1 }}>
-          <Avatar source={require("assets/avatar.png")} />
+          <Avatar size="large" source={require("assets/avatar.png")} />
           <ListItem title="ОВОГ" description={user.last_name} />
           <Divider />
           <ListItem title="НЭР" description={user.first_name} />

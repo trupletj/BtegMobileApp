@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const SubServiceScreen = () => {
+const ErrorScreen = () => {
   return (
     <View>
-      <Text>SubServiceScreen</Text>
+      <Text>ErrorScreen</Text>
     </View>
   );
 };
 
-export default SubServiceScreen;
+export default ErrorScreen;

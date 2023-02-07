@@ -53,8 +53,12 @@ const LoginConfirmPhone = ({ route }) => {
           />
           <Divider style={{ marginTop: 10 }} />
 
-          <Button style={styles.buttonStyle} onPress={onPressEntry}>
-            Нэвтрэх
+          <Button
+            style={styles.buttonStyle}
+            onPress={onPressEntry}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner status="basic" /> : "Нэвтрэх"}
           </Button>
           <Button
             style={styles.buttonStyle}

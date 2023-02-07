@@ -2,8 +2,9 @@ import React, { useEffect, useMemo } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button, Divider, Layout } from "@ui-kitten/components";
 import { useForm, Controller, useController, set } from "react-hook-form";
-import formFields from "./formFields";
+import data from "./formFields.json";
 
+//inner Components
 import SelectMulti from "./components/SelectMulti";
 import Checker from "./components/Checker";
 import Selecter from "./components/Selecter";
@@ -35,7 +36,7 @@ export default () => {
 
   return (
     <Layout style={styles.container}>
-      {formFields.map((field, i) => {
+      {data.formFields.map((field, i) => {
         switch (field.type) {
           case "text":
             return (

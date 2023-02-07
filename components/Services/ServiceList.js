@@ -1,12 +1,38 @@
-import { StyleSheet, ScrollView, View, FlatList } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { Text, Layout, Divider, Card } from "@ui-kitten/components";
 import React from "react";
+import { useAppState } from "../../hooks/useAppState";
+
+import { useNavigation } from "@react-navigation/native";
 
 const ServiceList = () => {
+  const navigation = useNavigation();
+  const { services } = useAppState();
+
   return (
     <>
       <ScrollView>
         <Layout style={styles.container}>
+          {services.map((_, i) => {
+            return (
+              <TouchableOpacity
+                key={i}
+                onPress={() => navigation.navigate("SingleServiceForm")}
+              >
+                <View style={styles.square}>
+                  <Text>{_.name}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+          {/* <View style={styles.square} />
           <View style={styles.square} />
           <View style={styles.square} />
           <View style={styles.square} />
@@ -25,8 +51,7 @@ const ServiceList = () => {
           <View style={styles.square} />
           <View style={styles.square} />
           <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
+          <View style={styles.square} /> */}
         </Layout>
       </ScrollView>
     </>

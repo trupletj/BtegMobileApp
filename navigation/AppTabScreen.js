@@ -20,8 +20,6 @@ import { MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "hooks/useAuth";
 //screens
-import HomeScreen from "screens/HomeScreen/HomeScreen";
-import ProfileScreen from "screens/ProfileScreen/ProfileScreen";
 import ServiceScreen from "screens/ServiceScreen/ServiceScreen";
 import RequistScreen from "screens/RequistScreen/RequistScreen";
 import globals from "constants/globals";
@@ -29,8 +27,6 @@ import globals from "constants/globals";
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const BottomTabBar = ({ navigation, state }) => {
-  const { user } = useAuth();
-
   return (
     <View style={{ position: "relative" }}>
       <View
@@ -44,12 +40,13 @@ const BottomTabBar = ({ navigation, state }) => {
           borderRadius: 10,
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("QrScreen")}>
           <MaterialIcons name="qr-code-2" size={36} color="white" />
         </TouchableOpacity>
       </View>
       <Layout>
         <BottomNavigation
+          appearance="noIndicator"
           selectedIndex={state.index}
           onSelect={(index) => navigation.navigate(state.routeNames[index])}
         >
@@ -81,14 +78,6 @@ const BottomTabBar = ({ navigation, state }) => {
   );
 };
 
-const EditIcon = (props) => (
-  <MaterialIcons
-    name="notifications-none"
-    size={24}
-    color={globals.COLOR.PRIMARY}
-  />
-);
-
 const AppTabScreen = () => {
   const { user } = useAuth();
   const navigation = useNavigation();
@@ -96,7 +85,7 @@ const AppTabScreen = () => {
   const renderTitle = (props) => (
     <TouchableOpacity
       style={styles.titleContainer}
-      onPress={() => navigation.navigate("ProfileScreen")}
+      onPress={() => navigation.openDrawer()}
     >
       <Avatar style={styles.logo} source={require("assets/avatar.png")} />
       <Text {...props} style={{ fontWeight: "bold", fontSize: 16 }}>
@@ -107,32 +96,37 @@ const AppTabScreen = () => {
     </TouchableOpacity>
   );
 
+  const EditIcon = (props) => (
+    <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
+      <MaterialIcons
+        name="notifications-none"
+        size={24}
+        color={globals.COLOR.PRIMARY}
+      />
+    </TouchableOpacity>
+  );
+
   const renderRightActions = () => <TopNavigationAction icon={EditIcon} />;
   return (
     <ProvideAppState>
-      <Layout style={{ flex: 1 }}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <Layout level="1" style={{ paddingVertical: 5 }}>
-            <TopNavigation
-              title={renderTitle}
-              // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
-              accessoryRight={renderRightActions}
-            />
-          </Layout>
-          <Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-            tabBar={(props) => <BottomTabBar {...props} />}
-          >
-            <Screen name="Service" component={ServiceScreen} />
-            <Screen name="Requist" component={RequistScreen} />
-            {/* <Screen name="Home" component={HomeScreen} /> */}
-            {/*   
-          <Screen name="Profile" component={ProfileScreen} /> */}
-          </Navigator>
-        </SafeAreaView>
-      </Layout>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Layout level="4" style={{ paddingVertical: 5 }}>
+          <TopNavigation
+            title={renderTitle}
+            // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
+            accessoryRight={renderRightActions}
+          />
+        </Layout>
+        <Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          tabBar={(props) => <BottomTabBar {...props} />}
+        >
+          <Screen name="Service" component={ServiceScreen} />
+          <Screen name="Requist" component={RequistScreen} />
+        </Navigator>
+      </SafeAreaView>
     </ProvideAppState>
   );
 };
