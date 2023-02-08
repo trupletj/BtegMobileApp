@@ -52,6 +52,14 @@
       "rules": {
         "required": { "value": true, "message": "Field is required!" }
       }
+    },
+    {
+      "type": "datepicker",
+      "name": "date",
+      "label": "Огноо",
+      "rules": {
+        "required": { "value": true, "message": "Field is required!" }
+      }
     }
   ]
 }

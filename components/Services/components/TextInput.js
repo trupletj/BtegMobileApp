@@ -12,7 +12,15 @@ import {
 } from "@ui-kitten/components";
 import { useForm, Controller, useController, set } from "react-hook-form";
 
-const TextInput = ({ name, control, rules, label, caption, status }) => {
+const TextInput = ({
+  name,
+  control,
+  rules,
+  label,
+  caption,
+  status,
+  multiline,
+}) => {
   const { field } = useController({
     control,
     defaultValue: "",
@@ -27,6 +35,7 @@ const TextInput = ({ name, control, rules, label, caption, status }) => {
       value={field.value}
       status={status}
       caption={caption}
+      multiline={multiline}
     />
   );
 };

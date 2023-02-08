@@ -84,7 +84,7 @@ export const fetchData = async (data, token) => {
         return response;
       })
       .catch(function (error) {
-        console.error("there is error", error);
+        console.error("fetch Data error in api calls :", error);
       });
 
     return response;

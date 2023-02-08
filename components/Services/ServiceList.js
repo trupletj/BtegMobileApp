@@ -8,12 +8,12 @@ import {
 import { Text, Layout, Divider, Card } from "@ui-kitten/components";
 import React from "react";
 import { useAppState } from "../../hooks/useAppState";
-
+import services from "./services.json";
 import { useNavigation } from "@react-navigation/native";
 
 const ServiceList = () => {
   const navigation = useNavigation();
-  const { services } = useAppState();
+  // const { services } = useAppState();
 
   return (
     <>
@@ -23,7 +23,14 @@ const ServiceList = () => {
             return (
               <TouchableOpacity
                 key={i}
-                onPress={() => navigation.navigate("SingleServiceForm")}
+                onPress={() =>
+                  navigation.navigate("ServiceMiddle", {
+                    id: _.id,
+                    type: _.type,
+                    name: _.name,
+                    formFields: _.formFields,
+                  })
+                }
               >
                 <View style={styles.square}>
                   <Text>{_.name}</Text>

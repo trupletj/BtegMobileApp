@@ -15,7 +15,9 @@ import AppTabScreen from "./AppTabScreen";
 import LoginConfirmPhone from "screens/LoginStack/LoginConfirmPhone";
 import LoginWithPhone from "screens/LoginStack/LoginWithPhone";
 import LoginWithUser from "screens/LoginStack/LoginWithUser";
-import SingleServiceFormScreen from "../screens/ServiceScreen/SingleServiceFormScreen";
+import SingleServiceFormScreen from "screens/ServiceScreen/SingleServiceFormScreen";
+import SingleServiceTableScreen from "screens/ServiceScreen/SingleServiceTableScreen";
+import ServiceMiddleScreen from "screens/ServiceScreen/ServiceMiddleScreen";
 
 const Stack = createNativeStackNavigator();
 const DrawerStack = createDrawerNavigator();
@@ -65,8 +67,16 @@ const Navigation = () => {
             <Stack.Group>
               <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
               <Stack.Screen
+                name="ServiceMiddle"
+                component={ServiceMiddleScreen}
+              />
+              <Stack.Screen
                 name="SingleServiceForm"
                 component={SingleServiceFormScreen}
+              />
+              <Stack.Screen
+                name="SingleServiceTable"
+                component={SingleServiceTableScreen}
               />
             </Stack.Group>
           )}

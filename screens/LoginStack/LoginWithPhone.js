@@ -4,6 +4,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  SafeAreaView,
   Keyboard,
 } from "react-native";
 import {
@@ -47,9 +48,9 @@ const LoginWithPhone = () => {
     navigation.navigate("LoginWithUser");
   };
   return (
-    <Layout style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <Layout style={styles.container2}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <Layout style={styles.container}>
+        <SafeAreaView style={styles.container2}>
           <Layout>
             <View style={styles.logoContainer}>
               <Text category="h2">Нэвтрэх</Text>
@@ -98,9 +99,9 @@ const LoginWithPhone = () => {
               Бүртгэлэй хэрэглэгч
             </Button>
           </Layout>
-        </Layout>
-      </TouchableWithoutFeedback>
-    </Layout>
+        </SafeAreaView>
+      </Layout>
+    </TouchableWithoutFeedback>
   );
 };
 

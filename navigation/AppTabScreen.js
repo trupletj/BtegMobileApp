@@ -109,24 +109,26 @@ const AppTabScreen = () => {
   const renderRightActions = () => <TopNavigationAction icon={EditIcon} />;
   return (
     <ProvideAppState>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Layout level="4" style={{ paddingVertical: 5 }}>
-          <TopNavigation
-            title={renderTitle}
-            // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
-            accessoryRight={renderRightActions}
-          />
-        </Layout>
-        <Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          tabBar={(props) => <BottomTabBar {...props} />}
-        >
-          <Screen name="Service" component={ServiceScreen} />
-          <Screen name="Requist" component={RequistScreen} />
-        </Navigator>
-      </SafeAreaView>
+      <Layout style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Layout level="4" style={{ paddingVertical: 5 }}>
+            <TopNavigation
+              title={renderTitle}
+              // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
+              accessoryRight={renderRightActions}
+            />
+          </Layout>
+          <Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+            tabBar={(props) => <BottomTabBar {...props} />}
+          >
+            <Screen name="Service" component={ServiceScreen} />
+            <Screen name="Requist" component={RequistScreen} />
+          </Navigator>
+        </SafeAreaView>
+      </Layout>
     </ProvideAppState>
   );
 };

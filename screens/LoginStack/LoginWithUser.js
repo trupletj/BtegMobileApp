@@ -2,11 +2,18 @@ import {
   View,
   StyleSheet,
   Image,
-  KeyboardAvoidingView,
+  SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Layout, Text, Input, Button, Divider } from "@ui-kitten/components";
+import {
+  Layout,
+  Text,
+  Input,
+  Button,
+  Divider,
+  Spinner,
+} from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 
 import React, { useState } from "react";
@@ -18,7 +25,7 @@ const LoginWithUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { loginWithEmail, user } = useAuth();
+  const { loginWithEmail, user, isLoading } = useAuth();
 
   const onPressEntry = () => {
     loginWithEmail(email, password);
@@ -27,9 +34,9 @@ const LoginWithUser = () => {
     navigation.navigate("LoginWithPhone");
   };
   return (
-    <Layout style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <Layout style={styles.container2}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <Layout style={styles.container}>
+        <SafeAreaView style={styles.container2}>
           <Layout>
             <View style={styles.logoContainer}>
               <Text category="h2">Нэвтрэх</Text>
@@ -81,9 +88,9 @@ const LoginWithUser = () => {
               Кодоор нэвтрэх
             </Button>
           </Layout>
-        </Layout>
-      </TouchableWithoutFeedback>
-    </Layout>
+        </SafeAreaView>
+      </Layout>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -96,7 +103,6 @@ const styles = StyleSheet.create({
   container2: {
     flex: 1,
     justifyContent: "space-between",
-    height: "100%",
     flexDirection: "column",
     width: "100%",
     padding: 10,
