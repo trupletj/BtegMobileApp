@@ -16,10 +16,6 @@ const data = {
   globalSearch: [],
   dataloaded: 0,
 };
-const initialState = {
-  categories: [],
-  services: [],
-};
 
 export const ProvideAppState = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +83,7 @@ export const ProvideAppState = ({ children }) => {
       setIsLoading(false);
     }
   };
+
   const checkUpdate = async () => {
     console.log("Im checking update ....");
   };

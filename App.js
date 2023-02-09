@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
+
+import { Text, View, Button, Platform } from "react-native";
 //theme
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider } from "@ui-kitten/components";
@@ -10,6 +12,7 @@ import Navigation from "./navigation/Navigation";
 import { ProvideAuth } from "context/UserContext";
 //navigations
 import "react-native-gesture-handler";
+//notificatioin
 
 function App() {
   return (
