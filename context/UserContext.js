@@ -116,7 +116,7 @@ function useProvideAuth() {
     try {
       setIsLoading(true);
       do {
-        response = await api.loginWithEmail(email, password);
+        response = await api.loginWithEmail(email, password, expoPushToken);
       } while (!response.data.employee && !response.data.accessToken);
       setUser(response.data.employee);
       setToken(response.data.accessToken);
@@ -138,7 +138,12 @@ function useProvideAuth() {
   const loginConfirmCode = async (emp_code, phone, code) => {
     try {
       setIsLoading(true);
-      const response = await api.loginConfirmCode(emp_code, phone, code);
+      const response = await api.loginConfirmCode(
+        emp_code,
+        phone,
+        code,
+        expoPushToken
+      );
       setUser(response.data.user.employee);
       setToken(response.data.token);
       await AsyncStorage.setItem(

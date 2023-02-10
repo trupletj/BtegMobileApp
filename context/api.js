@@ -15,13 +15,14 @@ export const loginWithPhone = async (emp_code, phone) => {
   }
 };
 
-export const loginWithEmail = async (email, password) => {
+export const loginWithEmail = async (email, password, expoPushToken) => {
   try {
     const response = await axios.post(
       `${REACT_APP_BASE_URL}/api/auth/login?is_mobile=2`,
       {
         email,
         password,
+        expoPushToken,
       }
     );
     return response;
@@ -30,12 +31,18 @@ export const loginWithEmail = async (email, password) => {
   }
 };
 
-export const loginConfirmCode = async (emp_code, phone, code) => {
+export const loginConfirmCode = async (
+  emp_code,
+  phone,
+  code,
+  expoPushToken
+) => {
   try {
     const response = await axios.post(`${REACT_APP_BASE_URL}/sms/login/phone`, {
       emp_code,
       phone,
       code,
+      expoPushToken,
     });
     return response;
   } catch (error) {
