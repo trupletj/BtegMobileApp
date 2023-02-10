@@ -19,12 +19,18 @@ const Category = () => {
   return (
     <Layout style={styles.container} level="1">
       <ScrollView horizontal={true}>
+        <View key={1231} style={styles.category}>
+          <Card style={styles.card} status="success">
+            <Text category="label">БҮГД</Text>
+          </Card>
+        </View>
         {categories &&
           categories.map((_, i) => {
             return (
               <View key={i} style={styles.category}>
-                <Card style={styles.card} status="primary"></Card>
-                <Text category="label">{_.name}</Text>
+                <Card style={styles.card} status="primary">
+                  <Text category="label">{_.name}</Text>
+                </Card>
               </View>
             );
           })}
@@ -38,11 +44,10 @@ export default Category;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    height: 120,
+    paddingVertical: 10,
   },
   card: {
     margin: 2,
-    borderRadius: 50,
   },
   category: {
     flex: 1,

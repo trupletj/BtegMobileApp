@@ -8,12 +8,13 @@ import {
 import { Text, Layout, Divider, Card } from "@ui-kitten/components";
 import React from "react";
 import { useAppState } from "../../hooks/useAppState";
-import services from "./services.json";
+// import services from "./services.json";
 import { useNavigation } from "@react-navigation/native";
 
-const ServiceList = () => {
+import Iconizer from "components/Iconizer";
+
+const ServiceList = ({ services }) => {
   const navigation = useNavigation();
-  // const { services } = useAppState();
 
   return (
     <>
@@ -26,38 +27,18 @@ const ServiceList = () => {
                 onPress={() =>
                   navigation.navigate("ServiceMiddle", {
                     id: _.id,
-                    type: _.type,
-                    name: _.name,
-                    formFields: _.formFields,
                   })
                 }
               >
                 <View style={styles.square}>
-                  <Text>{_.name}</Text>
+                  {/* <Iconizer iconType={_.iconType} size={36} color="white" /> */}
+                  <Text style={{ fontSize: 10, textAlign: "center" }}>
+                    {_.name}
+                  </Text>
                 </View>
               </TouchableOpacity>
             );
           })}
-          {/* <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} />
-          <View style={styles.square} /> */}
         </Layout>
       </ScrollView>
     </>
@@ -67,7 +48,6 @@ const ServiceList = () => {
 export default ServiceList;
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#7CA1B4",
     flex: 1,
     flexDirection: "row",
     gap: "2rem",
@@ -75,9 +55,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   square: {
-    backgroundColor: "#7cb48f",
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     margin: 4,
+    alignItems: "center",
+    textAlign: "center",
   },
 });

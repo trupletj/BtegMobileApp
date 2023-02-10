@@ -47,7 +47,20 @@ export default ({ formField, name }) => {
               return (
                 <TextInput
                   key={i}
-                  multiline={field.multiline}
+                  multiline={false}
+                  label={field.display_name}
+                  name={field.field}
+                  control={control}
+                  // rules={field.rules}
+                  caption={errors[field.field] && errors[field.field].message}
+                  status={errors[field.field] && "danger"}
+                />
+              );
+            case "textarea":
+              return (
+                <TextInput
+                  key={i}
+                  multiline={true}
                   label={field.label}
                   name={field.name}
                   control={control}

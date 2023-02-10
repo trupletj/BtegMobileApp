@@ -4,7 +4,9 @@
     "type": "form",
     "id": 5,
     "name": "Захиалгын хуудас",
-    "logo": "qwe",
+    "iconType": "Entypo",
+
+    "logo": "chat",
     "table_name": "qwe",
     "model_name": "qwe",
     "model_path": "qwe",
@@ -87,7 +89,9 @@
     "type": "form",
     "id": 4,
     "name": "Тодорхойлолт",
-    "logo": "qwe",
+    "iconType": "Entypo",
+
+    "logo": "bowl",
     "table_name": "qwe",
     "model_name": "qwe",
     "model_path": "qwe",
@@ -147,7 +151,104 @@
     "type": "form",
     "id": 2,
     "name": "Аюулыг мэдээллэх",
-    "logo": "qwe",
+    "iconType": "Entypo",
+
+    "logo": "cake",
+    "table_name": "qwe",
+    "model_name": "qwe",
+    "model_path": "qwe",
+    "description": "qwe",
+    "details": "qwe",
+    "created_at": "2023-02-02T02:28:52.000000Z",
+    "category_id": 2,
+    "updated_at": "2023-02-02T02:28:52.000000Z",
+    "created_user_id": 26,
+    "formFields": [
+      {
+        "type": "datepicker",
+        "name": "date",
+        "label": "Огноо",
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        }
+      },
+      {
+        "type": "text",
+        "name": "location",
+        "label": "Байрлал",
+        "multiline": false,
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        },
+        "_comment": "name - table column name,"
+      },
+
+      {
+        "type": "select",
+        "name": "hazard_type",
+        "label": "Аюулын төрөл",
+        "options": [
+          { "value": "chocolate", "label": "Chocolate" },
+          { "value": "strawberry", "label": "Strawberry" },
+          { "value": "Vanilla", "label": "Vanilla" }
+        ],
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        }
+      },
+      {
+        "type": "select",
+        "name": "harm_size",
+        "label": "Хохирлын хэмжээ",
+        "options": [
+          { "value": "large", "label": "Их" },
+          { "value": "medium", "label": "Дунд" },
+          { "value": "small", "label": "Бага" }
+        ],
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        }
+      },
+      {
+        "type": "text",
+        "name": "avsan_arga_hemjee",
+        "label": "Авсан арга хэмжээ",
+        "multiline": true,
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        },
+        "_comment": "name - table column name,"
+      },
+      {
+        "type": "text",
+        "name": "avah_shaardlagatai",
+        "label": "Авах шаардлагатай",
+        "multiline": true,
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        },
+        "_comment": "name - table column name,"
+      },
+      {
+        "type": "imagepicker",
+        "name": "avah_shaardlagatai",
+        "label": "Авах шаардлагатай",
+        "multiline": true,
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        },
+        "_comment": "name - table column name,"
+      }
+    ]
+  },
+  {
+    "btn_name": "Мэдээллэх",
+    "type": "form",
+    "id": 2,
+    "name": "Аюулыг мэдээллэх",
+    "iconType": "Entypo",
+
+    "logo": "battery",
     "table_name": "qwe",
     "model_name": "qwe",
     "model_path": "qwe",
@@ -240,7 +341,65 @@
     "type": "table",
     "id": 1,
     "name": "Цагийн мэдээлэл харах",
-    "logo": "qwe",
+    "iconType": "Entypo",
+
+    "logo": "briefcase",
+    "table_name": "qwe",
+    "model_name": "qwe",
+    "model_path": "qwe",
+    "description": "qwe",
+    "details": "qwe",
+    "created_at": "2023-02-01T05:18:26.000000Z",
+    "category_id": 1,
+    "updated_at": "2023-02-01T05:18:26.000000Z",
+    "created_user_id": 26,
+    "about_text": "about"
+  },
+  {
+    "btn_name": "Харах",
+    "type": "table",
+    "id": 1,
+    "name": "Классик компьютер",
+    "iconType": "Entypo",
+
+    "logo": "classic-computer",
+    "table_name": "qwe",
+    "model_name": "qwe",
+    "model_path": "qwe",
+    "description": "qwe",
+    "details": "qwe",
+    "created_at": "2023-02-01T05:18:26.000000Z",
+    "category_id": 1,
+    "updated_at": "2023-02-01T05:18:26.000000Z",
+    "created_user_id": 26,
+    "about_text": "about"
+  },
+  {
+    "btn_name": "Харах",
+    "type": "table",
+    "id": 1,
+    "name": "Автобус бүртгэл",
+    "iconType": "FontAwesome5",
+    "logo": "bus-alt",
+    "table_name": "qwe",
+    "model_name": "qwe",
+    "model_path": "qwe",
+    "description": "qwe",
+    "details": "qwe",
+    "created_at": "2023-02-01T05:18:26.000000Z",
+    "category_id": 1,
+    "updated_at": "2023-02-01T05:18:26.000000Z",
+    "created_user_id": 26,
+    "about_text": "about"
+  },
+  {
+    "btn_name": "Харах",
+    "type": "table",
+    "id": 1,
+    "name": "мэдээлэл харах",
+    "iconType": "Entypo",
+
+    "logo": "clipboard",
     "table_name": "qwe",
     "model_name": "qwe",
     "model_path": "qwe",

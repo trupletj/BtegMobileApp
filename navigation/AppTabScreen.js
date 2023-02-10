@@ -46,7 +46,6 @@ const BottomTabBar = ({ navigation, state }) => {
       </View>
       <Layout>
         <BottomNavigation
-          appearance="noIndicator"
           selectedIndex={state.index}
           onSelect={(index) => navigation.navigate(state.routeNames[index])}
         >
@@ -111,7 +110,7 @@ const AppTabScreen = () => {
     <ProvideAppState>
       <Layout style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }}>
-          <Layout level="4" style={{ paddingVertical: 5 }}>
+          <Layout level="4" style={{ paddingBottom: 5 }}>
             <TopNavigation
               title={renderTitle}
               // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}

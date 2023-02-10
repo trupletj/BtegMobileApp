@@ -128,10 +128,7 @@ function useProvideAuth() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.error(
-        "eroooooooooooooooooooooooooooooooooooooooooooooooor",
-        error
-      );
+      alert("Нэвтрэхэд алдаа гарлаа");
     }
   };
 

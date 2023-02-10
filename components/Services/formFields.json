@@ -10,6 +10,15 @@
       "_comment": "name - table column name,"
     },
     {
+      "type": "textarea",
+      "name": "firstname",
+      "label": "First name",
+      "rules": {
+        "required": { "value": true, "message": "Field is required!" }
+      },
+      "_comment": "name - table column name,"
+    },
+    {
       "type": "text",
       "name": "lastname",
       "label": "Last name",
@@ -21,11 +30,6 @@
       "type": "checkbox",
       "name": "firstcheckbox",
       "label": "First Checkbox"
-    },
-    {
-      "type": "checkbox",
-      "name": "secondcheckbox",
-      "label": "Second Checkbox"
     },
     {
       "type": "select",

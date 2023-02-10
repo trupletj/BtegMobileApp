@@ -6,24 +6,14 @@ import { useNavigation } from "@react-navigation/native";
 
 const ServiceMiddleScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { id, type, name, formFields } = route.params;
+  const { id } = route.params;
   const handleConfirm = () => {
-    switch (type) {
-      case "form": {
-        navigation.navigate("SingleServiceForm", { formFields, name });
-        break;
-      }
-      case "table": {
-        navigation.navigate("SingleServiceTable");
-        break;
-      }
-    }
+    navigation.navigate("SingleServiceForm", { id });
   };
 
   return (
     <Layout style={{ flex: 1, width: "100%" }}>
       <SafeAreaView style={styles.container}>
-        <Text category="h3">{name}</Text>
         <Button status="success" onPress={() => handleConfirm()}>
           Хүсэлт
         </Button>
