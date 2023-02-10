@@ -10,6 +10,7 @@ import Checker from "./components/Checker";
 import Selecter from "./components/Selecter";
 import TextInput from "./components/TextInput";
 import Dater from "./components/Dater";
+import CustomImagePicker from "components/ImagePicker/CustomImagePicker";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default ({ formField, name }) => {
@@ -103,6 +104,18 @@ export default ({ formField, name }) => {
                   rules={field.rules}
                   caption={errors[field.name] && errors[field.name].message}
                   status={errors[field.name] && "danger"}
+                />
+              );
+            case "imagepicker":
+              return (
+                <CustomImagePicker
+                  key={i}
+                  // label={field.label}
+                  // control={control}
+                  // name={field.name}
+                  // rules={field.rules}
+                  // caption={errors[field.name] && errors[field.name].message}
+                  // status={errors[field.name] && "danger"}
                 />
               );
           }

@@ -222,6 +222,16 @@
           "required": { "value": true, "message": "Field is required!" }
         },
         "_comment": "name - table column name,"
+      },
+      {
+        "type": "imagepicker",
+        "name": "avah_shaardlagatai",
+        "label": "Авах шаардлагатай",
+        "multiline": true,
+        "rules": {
+          "required": { "value": true, "message": "Field is required!" }
+        },
+        "_comment": "name - table column name,"
       }
     ]
   },

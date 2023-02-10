@@ -78,7 +78,7 @@ function useProvideAuth() {
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
       });
-
+    console.log(notification);
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);

@@ -38,7 +38,6 @@ const ServiceList = () => {
               </TouchableOpacity>
             );
           })}
-
           {/* <View style={styles.square} />
           <View style={styles.square} />
           <View style={styles.square} />
