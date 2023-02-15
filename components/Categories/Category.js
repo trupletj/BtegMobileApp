@@ -8,19 +8,17 @@ import {
   Card,
 } from "@ui-kitten/components";
 import React, { useEffect, useContext } from "react";
-import axios from "axios";
-import { REACT_APP_BASE_URL } from "@env";
-import { useAuth } from "hooks/useAuth";
-import { useAppState } from "../../hooks/useAppState";
 
-const Category = () => {
-  const { categories, isLoading } = useAppState();
-
+const Category = ({ categories, handleCategorySelect, selectedCategoryId }) => {
   return (
     <Layout style={styles.container} level="1">
-      <ScrollView horizontal={true}>
+      <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
         <View key={1231} style={styles.category}>
-          <Card style={styles.card} status="success">
+          <Card
+            style={styles.card}
+            status={selectedCategoryId === null ? "primary" : "basic"}
+            onPress={() => handleCategorySelect(null)}
+          >
             <Text category="label">БҮГД</Text>
           </Card>
         </View>
@@ -28,7 +26,11 @@ const Category = () => {
           categories.map((_, i) => {
             return (
               <View key={i} style={styles.category}>
-                <Card style={styles.card} status="primary">
+                <Card
+                  style={styles.card}
+                  status={selectedCategoryId === _.id ? "primary" : "basic"}
+                  onPress={() => handleCategorySelect(_.id)}
+                >
                   <Text category="label">{_.name}</Text>
                 </Card>
               </View>

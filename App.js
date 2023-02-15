@@ -11,14 +11,17 @@ import Navigation from "./navigation/Navigation";
 //context
 import { ProvideAuth } from "context/UserContext";
 //navigations
+import { NavigationContainer } from "@react-navigation/native";
 import "react-native-gesture-handler";
 //notificatioin
 
 function App() {
   return (
     <ProvideAuth>
-      <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-        <Navigation />
+      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+        <NavigationContainer>
+          <Navigation />
+        </NavigationContainer>
       </ApplicationProvider>
     </ProvideAuth>
   );

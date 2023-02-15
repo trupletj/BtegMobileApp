@@ -1,26 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-  useRef,
-} from "react";
+import React, { useState, useEffect, createContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNetwork } from "hooks/useNetwork";
 import * as api from "./api";
+import axios from "axios";
 
 //notifications
-
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+import { useNotifications } from "../hooks/useNotifications";
 
 export const authContext = createContext();
 
@@ -33,68 +17,31 @@ function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const isConnected = useNetwork();
   const [hasLoggedIn, setHasLoggedIn] = useState(false);
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
 
+  const { expoPushToken, notification } = useNotifications();
   useEffect(() => {
     const getSessionFromStorage = async () => {
       try {
-        const user = await AsyncStorage.getItem("user");
-        const token = await AsyncStorage.getItem("token");
+        const [user, token] = await Promise.all([
+          AsyncStorage.getItem("user"),
+          AsyncStorage.getItem("token"),
+        ]);
         if (user && token) {
           setUser(JSON.parse(user));
           setToken(token);
-          if (isConnected) {
-            checkSession();
-          }
         }
       } catch (error) {
         console.error(error);
       }
     };
 
-    const checkIfHasLoggedIn = async () => {
-      try {
-        const value = await AsyncStorage.getItem("hasLoggedInKey");
-        if (value === null) {
-          setHasLoggedIn(false);
-        } else {
-          setHasLoggedIn(true);
-        }
-      } catch (error) {
-        console.log("Error getting data from storage: ", error);
-      }
-    };
     getSessionFromStorage();
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-    console.log(notification);
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-    // checkIfHasLoggedIn();
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
   }, []);
 
   useEffect(() => {
     const checkSessionInterval = setInterval(() => {
-      if (token && user && isConnected) checkSession();
+      if (token && user) checkSession();
     }, 1000 * 60 * 30); // check session every minute
     return () => clearInterval(checkSessionInterval);
   }, [user, token]);
@@ -112,20 +59,23 @@ function useProvideAuth() {
   };
 
   const loginWithEmail = async (email, password) => {
-    let response;
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      do {
-        response = await api.loginWithEmail(email, password, expoPushToken);
-      } while (!response.data.employee && !response.data.accessToken);
-      setUser(response.data.employee);
-      setToken(response.data.accessToken);
-      await AsyncStorage.setItem(
-        "user",
-        JSON.stringify(response.data.employee)
-      );
-      await AsyncStorage.setItem("token", response.data.accessToken);
-      setIsLoading(false);
+      const response = await api.loginWithEmail(email, password, expoPushToken);
+      if (response.data.employee && response.data.accessToken) {
+        setUser(response.data.employee);
+        setToken(response.data.accessToken);
+        await AsyncStorage.setItem(
+          "user",
+          JSON.stringify(response.data.employee)
+        );
+        await AsyncStorage.setItem("token", response.data.accessToken);
+        setIsLoading(false);
+      } else {
+        // Retry the API call after a delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await loginWithEmail(email, password);
+      }
     } catch (error) {
       setIsLoading(false);
       alert("Нэвтрэхэд алдаа гарлаа");
@@ -155,17 +105,13 @@ function useProvideAuth() {
     }
   };
 
-  const logOut = async () => {
-    try {
-      setIsLoading(true);
-      await api.logOut();
-      setUser(null);
-      setToken(null);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error(error);
-    }
+  const logOut = () => {
+    setIsLoading(true);
+    AsyncStorage.removeItem("user");
+    AsyncStorage.removeItem("token");
+    setUser(null);
+    setToken(null);
+    setIsLoading(false);
   };
 
   const checkSession = async () => {
@@ -180,6 +126,25 @@ function useProvideAuth() {
     }
   };
 
+  //axios  interceptors
+  axios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      console.log(error);
+      const code = error.response.status;
+      switch (code) {
+        case 401:
+          logOut();
+      }
+      // Add your error handling logic here
+      // For example, you can show an error message to the user or redirect them to a specific page
+
+      return Promise.reject(error);
+    }
+  );
+
   return {
     user,
     token,
@@ -193,48 +158,4 @@ function useProvideAuth() {
     expoPushToken,
     notification,
   };
-}
-
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
-      data: { data: "goes here" },
-    },
-    trigger: { seconds: 2 },
-  });
-}
-
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
-
-  return token;
 }

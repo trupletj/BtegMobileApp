@@ -2,12 +2,16 @@ import { View, Text, StyleSheet } from "react-native";
 import { Input, Layout } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import globals from "constants/globals";
 
-const SearchBar = () => {
-  const [value, setValue] = React.useState("");
-
+const SearchBar = ({ value, onChange }) => {
   const renderIcon = (props) => (
-    <AntDesign {...props} name="search1" size={20} color="white" />
+    <AntDesign
+      {...props}
+      name="search1"
+      size={20}
+      color={globals.COLOR.PRIMARY}
+    />
   );
 
   return (
@@ -17,7 +21,7 @@ const SearchBar = () => {
         value={value}
         placeholder="Хайх..."
         accessoryLeft={renderIcon}
-        onChangeText={(nextValue) => setValue(nextValue)}
+        onChangeText={onChange}
       ></Input>
     </Layout>
   );
@@ -28,6 +32,7 @@ export default SearchBar;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    marginHorizontal: 10,
   },
   input: {
     flex: 1,

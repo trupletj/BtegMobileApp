@@ -71,7 +71,7 @@ export const ProvideAppState = ({ children }) => {
       ...dd,
       modelName: "Frontend\\Plugins\\ApplicationService\\ApplicationService",
     };
-    console.log(data);
+
     try {
       setIsLoading(true);
       const response = await api.fetchData(data, token);

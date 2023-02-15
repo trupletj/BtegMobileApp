@@ -1,14 +1,11 @@
 import axios from "axios";
 import { REACT_APP_BASE_URL } from "@env";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
+axios.defaults.baseURL = REACT_APP_BASE_URL;
 //login
 export const loginWithPhone = async (emp_code, phone) => {
   try {
-    const response = await axios.post(
-      `${REACT_APP_BASE_URL}/sms/sendloginsms`,
-      { emp_code, phone }
-    );
+    const response = await axios.post(`/sms/sendloginsms`, { emp_code, phone });
     return response;
   } catch (error) {
     console.error(error);
@@ -17,14 +14,11 @@ export const loginWithPhone = async (emp_code, phone) => {
 
 export const loginWithEmail = async (email, password, expoPushToken) => {
   try {
-    const response = await axios.post(
-      `${REACT_APP_BASE_URL}/api/auth/login?is_mobile=2`,
-      {
-        email,
-        password,
-        expoPushToken,
-      }
-    );
+    const response = await axios.post(`/api/auth/login?is_mobile=2`, {
+      email,
+      password,
+      expoPushToken,
+    });
     return response;
   } catch (error) {
     console.error(error);
@@ -38,7 +32,7 @@ export const loginConfirmCode = async (
   expoPushToken
 ) => {
   try {
-    const response = await axios.post(`${REACT_APP_BASE_URL}/sms/login/phone`, {
+    const response = await axios.post(`/sms/login/phone`, {
       emp_code,
       phone,
       code,
@@ -50,52 +44,29 @@ export const loginConfirmCode = async (
   }
 };
 
-export const logOut = async () => {
-  try {
-    await AsyncStorage.removeItem("user");
-    await AsyncStorage.removeItem("token");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const checkSession = async (token) => {
-  try {
-    const response = await axios.get(
-      `${REACT_APP_BASE_URL}/api/auth/me?is_mobile=2`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  const response = await axios.get(`/api/auth/me?is_mobile=2`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-    return response;
-  } catch (error) {
-    let respone = { status: "failed" };
-    return respone;
-  }
+  return response;
 };
 
 //App data
 
 export const fetchData = async (data, token) => {
-  try {
-    const response = await axios({
-      method: "POST",
-      // url: `${REACT_APP_BASE_URL}/api/custom/list`,
-      url: `${REACT_APP_BASE_URL}/api/custom/list`,
-      data,
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(function (response) {
-        return response;
-      })
-      .catch(function (error) {
-        console.error("fetch Data error in api calls :", error);
-      });
-
+  const response = await axios({
+    method: "POST",
+    // url: `/api/custom/list`,
+    url: `/api/custom/list`,
+    data,
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }).then(function (response) {
     return response;
-  } catch (error) {
-    console.error(error);
-  }
+  });
+
+  return response;
 };
