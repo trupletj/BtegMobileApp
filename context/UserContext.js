@@ -1,7 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as api from "./api";
-import axios from "axios";
 
 //notifications
 import { useNotifications } from "../hooks/useNotifications";
@@ -125,25 +124,6 @@ function useProvideAuth() {
       console.error("check session error", error);
     }
   };
-
-  //axios  interceptors
-  axios.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      console.log(error);
-      const code = error.response.status;
-      switch (code) {
-        case 401:
-          logOut();
-      }
-      // Add your error handling logic here
-      // For example, you can show an error message to the user or redirect them to a specific page
-
-      return Promise.reject(error);
-    }
-  );
 
   return {
     user,

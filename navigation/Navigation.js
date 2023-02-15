@@ -7,18 +7,15 @@ import {
   TopNavigationAction,
 } from "@ui-kitten/components";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 //navigation
 import { useNavigation } from "@react-navigation/native";
-
 //hooks
-import { useAppState } from "hooks/useAppState";
 import { useAuth } from "hooks/useAuth";
 // Screens
+import AppDrawerStack from "./AppDrawerStack";
+import SplashScreen from "../screens/OtherScreens/SplashScreen";
 import QrScreen from "screens/OtherScreens/QrScreen";
 import NotificationScreen from "screens/OtherScreens/NotificationScreen";
-import ProfileScreen from "screens/ProfileScreen/ProfileScreen";
-import AppTabScreen from "./AppTabScreen";
 import LoginConfirmPhone from "screens/LoginStack/LoginConfirmPhone";
 import LoginWithPhone from "screens/LoginStack/LoginWithPhone";
 import LoginWithUser from "screens/LoginStack/LoginWithUser";
@@ -30,29 +27,11 @@ import globals from "constants/globals";
 import { AntDesign } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
-const DrawerStack = createDrawerNavigator();
-
-function AppDrawerStack() {
-  return (
-    <DrawerStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      drawerContent={(props) => <ProfileScreen {...props} />}
-    >
-      <DrawerStack.Screen name="AppTabScreen" component={AppTabScreen} />
-    </DrawerStack.Navigator>
-  );
-}
 
 const Navigation = () => {
   const navigation = useNavigation();
-  console.log(
-    "navigation =========================",
-    navigation.getCurrentRoute()
-  );
-
   const { user, token } = useAuth();
+
   const BackIcon = (props) => (
     <AntDesign {...props} size={24} color={globals.COLOR.PRIMARY} name="left" />
   );
@@ -68,12 +47,11 @@ const Navigation = () => {
           animationTypeForReplace: token ? "pop" : "push",
         }}
       >
-        {/* {!hasLoggedIn && (
-            <Stack.Group screenOptions={{ presentation: "modal" }}>
-              <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-            </Stack.Group>
-          )} */}
-
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
         {!user || !token ? (
           <Stack.Group>
             <Stack.Screen
