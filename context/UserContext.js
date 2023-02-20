@@ -8,6 +8,7 @@ import { useNotifications } from "../hooks/useNotifications";
 import globals from "constants/globals";
 
 const data = globals.DATA;
+const DATA_LIST = globals.DATA_LIST;
 
 export const authContext = createContext();
 
@@ -23,6 +24,7 @@ function useProvideAuth() {
   const [hasLoggedIn, setHasLoggedIn] = useState(false);
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
+  const [service_roles, setServiceRoles] = useState([]);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
   const [isAppReady, setIsAppReady] = useState(false);
@@ -57,33 +59,39 @@ function useProvideAuth() {
     // }
   }, [services, categories, user]);
 
+  const getSessionFromStorage = async () => {
+    try {
+      const [user, token] = await Promise.all([
+        AsyncStorage.getItem("user"),
+        AsyncStorage.getItem("token"),
+      ]);
+
+      setUser(JSON.parse(user));
+      setToken(token);
+      // if (services && categories && service_roles) {
+      //   setServices(JSON.parse(services));
+      //   setCategories(JSON.parse(categories));
+      //   // setServiceRoles(JSON.parse(service_roles));
+      // } else {
+      //   await getServices(data, token);
+      //   await getCategories(data, token);
+      //   // await getServicesRoles(data, token);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const getSessionFromStorage = async () => {
-      try {
-        const [user, token, services, categories] = await Promise.all([
-          AsyncStorage.getItem("user"),
-          AsyncStorage.getItem("token"),
-          AsyncStorage.getItem("services"),
-          AsyncStorage.getItem("categories"),
-        ]);
-        if (user && token) {
-          setUser(JSON.parse(user));
-
-          setToken(token);
-        }
-        if (services && categories) {
-          setServices(JSON.parse(services));
-          setCategories(JSON.parse(categories));
-        } else {
-          await getServices(data, token);
-          await getCategories(data, token);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+    if (token) {
+      getServices(data, token);
+      getCategories(data, token);
+      console.log("token changes", token);
+    }
+  }, [token]);
+  useEffect(() => {
     getSessionFromStorage();
+    console.log("check token");
   }, []);
 
   // useEffect(() => {
@@ -110,11 +118,11 @@ function useProvideAuth() {
     try {
       const response = await api.loginWithEmail(email, password, expoPushToken);
       if (response.data.employee && response.data.accessToken) {
-        setUser(response.data.employee);
+        setUser(response.data.user.employee);
         setToken(response.data.accessToken);
         await AsyncStorage.setItem(
           "user",
-          JSON.stringify(response.data.employee)
+          JSON.stringify(response.data.user.employee)
         );
         await AsyncStorage.setItem("token", response.data.accessToken);
         setIsLoading(false);
@@ -210,6 +218,32 @@ function useProvideAuth() {
       setIsLoading(false);
     }
   };
+  const getServicesRoles = async (dd, token) => {
+    var default_data = { ...dd };
+
+    default_data.filters.push({
+      field_name: "application_service_id",
+      filter_type: "=",
+      filter_value: user?.user?.role_id || 0,
+    });
+
+   
+    const data = {
+      ...default_data,
+      modelName:
+        "Frontend\\Plugins\\ApplicationService\\ApplicationServiceRole",
+    };
+    try {
+      setIsLoading(true);
+      const response = await api.fetchData(data, token);
+      setServiceRoles(response.data.records.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
 
   return {
     user,
@@ -228,5 +262,8 @@ function useProvideAuth() {
     isAppReady,
     setIsAppReady,
     progress,
+    service_roles,
+    data,
+    DATA_LIST,
   };
 }

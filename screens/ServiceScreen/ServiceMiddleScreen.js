@@ -1,20 +1,57 @@
 import { SafeAreaView, StyleSheet, View, TouchableOpacity } from "react-native";
-import React from "react";
-import { Layout, Text, Button, List, Card } from "@ui-kitten/components";
+import React, { useEffect, useState } from "react";
+import {
+  Layout,
+  Text,
+  Button,
+  List,
+  Card,
+  Spinner,
+} from "@ui-kitten/components";
 //navigation
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import globals from "constants/globals";
-
-const data = new Array(8).fill({
-  title: "Item",
-});
-
+import { useAuth } from "hooks/useAuth";
+import axios from "axios";
 const ServiceMiddleScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { id } = route.params;
+  const { service } = route.params;
+
+  const { service_roles, services, user, DATA_LIST, token } = useAuth();
+
+  const [results, setResults] = useState([]);
+  const fetchData = async (data, token) => {
+    axios({
+      method: "POST",
+      url: `/api/custom/list`,
+      data,
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(function (response) {
+      if (response.data.records) {
+        setResults(response?.data?.records?.data || []);
+      }
+      setLoading(false);
+    });
+  };
+  useEffect(() => {
+    var quest_data = { ...DATA_LIST };
+    let real_service_role =
+      '{"field_name": "worker_id", "filter_type": "=", "filter_value": ${user.user.employee_id}}';
+
+    let aa = JSON.stringify(eval("`" + real_service_role + "`"));
+    console.log(aa);
+    quest_data.filters.push(JSON.parse(aa));
+    quest_data.modelName = service.model_path + "\\" + service.model_name;
+    fetchData(quest_data, token);
+  }, [service.id]);
+
+  const [loading, setLoading] = useState(true);
   const handleConfirm = () => {
-    navigation.navigate("SingleServiceForm", { id });
+    navigation.navigate("SingleServiceForm", { id: service.id });
   };
 
   const Header = (props) => (
@@ -36,7 +73,7 @@ const ServiceMiddleScreen = ({ route }) => {
   );
   const renderItem = ({ item, index }) => (
     <Card style={styles.card} header={Header} footer={Footer}>
-      <Text>The Maldives, officially the Republic of Maldives</Text>
+      <Text>{JSON.stringify(item)}</Text>
       <View style={styles.tableContainer}>
         <View style={styles.item}>
           <Text>Header</Text>
@@ -59,27 +96,49 @@ const ServiceMiddleScreen = ({ route }) => {
     <Layout style={{ flex: 1, width: "100%" }}>
       <SafeAreaView style={{ flex: 1 }}>
         <Layout style={styles.container}>
-          <List data={data} renderItem={renderItem} />
-          <View style={styles.buttonGroup}>
-            <TouchableOpacity status="success" onPress={() => handleConfirm()}>
-              <AntDesign
-                name="pluscircle"
-                size={36}
-                color={globals.COLOR.PRIMARY}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ marginLeft: 5 }}
-              status="success"
-              onPress={() => console.log("first")}
+          {loading && (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <AntDesign
-                name="questioncircle"
-                size={36}
-                color={globals.COLOR.PRIMARY}
-              />
-            </TouchableOpacity>
-          </View>
+              <Spinner></Spinner>
+              <Text style={{ marginVertical: 10 }} status="info">
+                Өгөгдлийн тохируулж байна!
+              </Text>
+            </View>
+          )}
+          {!loading && (
+            <>
+              <List data={results} renderItem={renderItem} />
+              <View style={styles.buttonGroup}>
+                <TouchableOpacity
+                  status="success"
+                  onPress={() => handleConfirm()}
+                >
+                  <AntDesign
+                    name="pluscircle"
+                    size={36}
+                    color={globals.COLOR.PRIMARY}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginLeft: 5 }}
+                  status="success"
+                  onPress={() => console.log("first")}
+                >
+                  <AntDesign
+                    name="questioncircle"
+                    size={36}
+                    color={globals.COLOR.PRIMARY}
+                  />
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </Layout>
       </SafeAreaView>
     </Layout>

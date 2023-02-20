@@ -48,7 +48,7 @@ const Navigation = () => {
           animationTypeForReplace: token ? "pop" : "push",
         }}
       >
-        {!isAppReady && (
+        {!isAppReady && false && (
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}

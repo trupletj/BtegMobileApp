@@ -24,8 +24,8 @@ import { AntDesign } from "@expo/vector-icons";
 import globals from "constants/globals";
 
 const LoginWithPhone = () => {
-  const [phone, setPhone] = useState("");
-  const [attendenceId, setAttendenceId] = useState("");
+  const [phone, setPhone] = useState("99135213");
+  const [attendenceId, setAttendenceId] = useState("90012131");
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
   const { loginWithPhone, user, isLoading } = useAuth();
   const navigation = useNavigation();
@@ -34,6 +34,10 @@ const LoginWithPhone = () => {
     let response = await loginWithPhone(attendenceId, phone);
 
     if (response?.data?.status) {
+      navigation.navigate({
+        name: "LoginConfirmPhone",
+        params: { emp_code: attendenceId, phone },
+      });
       if (response.data.status.variant === "success")
         navigation.navigate({
           name: "LoginConfirmPhone",
@@ -59,6 +63,7 @@ const LoginWithPhone = () => {
               style={styles.inputStyle}
               onChangeText={setAttendenceId}
               placeholder="Цаг бүртгэлийн дугаар"
+              defaultValue={attendenceId}
               keyboardType="number-pad"
               accessoryLeft={() => (
                 <AntDesign
@@ -71,6 +76,7 @@ const LoginWithPhone = () => {
             <Input
               style={styles.inputStyle}
               onChangeText={setPhone}
+              defaultValue={phone}
               placeholder="Утасны дугаар"
               keyboardType="number-pad"
               accessoryLeft={() => (

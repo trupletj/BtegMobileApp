@@ -22,7 +22,7 @@ import globals from "constants/globals";
 import { useNavigation } from "@react-navigation/native";
 
 const LoginConfirmPhone = ({ route }) => {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("069983");
 
   const navigation = useNavigation();
   const { loginConfirmCode, user, isLoading } = useAuth();
@@ -42,6 +42,7 @@ const LoginConfirmPhone = ({ route }) => {
             style={styles.inputStyle}
             onChangeText={setCode}
             value={code}
+            defaultValue={code}
             placeholder="Утсанд илгээсэн код"
             keyboardType="number-pad"
             accessoryLeft={() => (

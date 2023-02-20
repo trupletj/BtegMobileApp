@@ -4,13 +4,14 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { Text, Layout, Divider, Card } from "@ui-kitten/components";
 import React from "react";
 import { useAppState } from "../../hooks/useAppState";
 // import services from "./services.json";
 import { useNavigation } from "@react-navigation/native";
-
+import { REACT_APP_BASE_URL } from "@env";
 import Iconizer from "components/Iconizer";
 
 const ServiceList = ({ services }) => {
@@ -20,20 +21,23 @@ const ServiceList = ({ services }) => {
     <>
       <ScrollView>
         <Layout style={styles.container}>
-          {services.map((_, i) => {
+          {services.map((service, i) => {
             return (
               <TouchableOpacity
                 key={i}
                 onPress={() =>
                   navigation.navigate("ServiceMiddle", {
-                    id: _.id,
+                    service,
                   })
                 }
               >
                 <View style={styles.square}>
+                  {/* <Image
+                    source={`${REACT_APP_BASE_URL}/${service.logo}`}
+                  ></Image> */}
                   {/* <Iconizer iconType={_.iconType} size={36} color="white" /> */}
                   <Text style={{ fontSize: 10, textAlign: "center" }}>
-                    {_.name}
+                    {service.name}
                   </Text>
                 </View>
               </TouchableOpacity>
