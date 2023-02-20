@@ -1,10 +1,4 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { SafeAreaView, StyleSheet, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { Layout, Text, Button, List, Card } from "@ui-kitten/components";
 //navigation

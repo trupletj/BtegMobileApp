@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 //Contexts
-import { ProvideAppState } from "context/AppStateContext";
 import {
   BottomNavigation,
   BottomNavigationTab,
@@ -107,28 +106,26 @@ const AppTabScreen = () => {
 
   const renderRightActions = () => <TopNavigationAction icon={EditIcon} />;
   return (
-    <ProvideAppState>
-      <Layout style={{ flex: 1 }}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <Layout level="4" style={{ paddingBottom: 5 }}>
-            <TopNavigation
-              title={renderTitle}
-              // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
-              accessoryRight={renderRightActions}
-            />
-          </Layout>
-          <Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-            tabBar={(props) => <BottomTabBar {...props} />}
-          >
-            <Screen name="Service" component={ServiceScreen} />
-            <Screen name="Requist" component={RequistScreen} />
-          </Navigator>
-        </SafeAreaView>
-      </Layout>
-    </ProvideAppState>
+    <Layout style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Layout level="4" style={{ paddingBottom: 5 }}>
+          <TopNavigation
+            title={renderTitle}
+            // subtitle={(evaProps) => <Text {...evaProps}>Subtitle</Text>}
+            accessoryRight={renderRightActions}
+          />
+        </Layout>
+        <Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          tabBar={(props) => <BottomTabBar {...props} />}
+        >
+          <Screen name="Service" component={ServiceScreen} />
+          <Screen name="Requist" component={RequistScreen} />
+        </Navigator>
+      </SafeAreaView>
+    </Layout>
   );
 };
 

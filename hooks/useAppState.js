@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNetwork } from "./useNetwork";
-import { AppStateContext } from "context/AppStateContext";
+import React, { useContext, useState, useEffect } from "react";
+import { authContext } from "context/UserContext";
 
 export const useAppState = () => {
-  return useContext(AppStateContext);
+  const { services, categories, progress, isAppReady, setIsAppReady } =
+    useContext(authContext);
+
+  return { services, categories, progress, isAppReady, setIsAppReady };
 };

@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 //hooks
 import { useAuth } from "hooks/useAuth";
+import { useAppState } from "hooks/useAppState";
 // Screens
 import AppDrawerStack from "./AppDrawerStack";
 import SplashScreen from "../screens/OtherScreens/SplashScreen";
@@ -20,7 +21,6 @@ import LoginConfirmPhone from "screens/LoginStack/LoginConfirmPhone";
 import LoginWithPhone from "screens/LoginStack/LoginWithPhone";
 import LoginWithUser from "screens/LoginStack/LoginWithUser";
 import SingleServiceFormScreen from "screens/ServiceScreen/SingleServiceFormScreen";
-import SingleServiceTableScreen from "screens/ServiceScreen/SingleServiceTableScreen";
 import ServiceMiddleScreen from "screens/ServiceScreen/ServiceMiddleScreen";
 //global
 import globals from "constants/globals";
@@ -31,6 +31,7 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
   const navigation = useNavigation();
   const { user, token } = useAuth();
+  const { isAppReady } = useAppState();
 
   const BackIcon = (props) => (
     <AntDesign {...props} size={24} color={globals.COLOR.PRIMARY} name="left" />
@@ -47,11 +48,13 @@ const Navigation = () => {
           animationTypeForReplace: token ? "pop" : "push",
         }}
       >
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{ headerShown: false }}
-        />
+        {!isAppReady && (
+          <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
+        )}
         {!user || !token ? (
           <Stack.Group>
             <Stack.Screen
@@ -88,14 +91,6 @@ const Navigation = () => {
             <Stack.Screen
               name="SingleServiceForm"
               component={SingleServiceFormScreen}
-              options={{
-                headerLeft: (props) => <BackAction {...props} />,
-                headerTitle: "",
-              }}
-            />
-            <Stack.Screen
-              name="SingleServiceTable"
-              component={SingleServiceTableScreen}
               options={{
                 headerLeft: (props) => <BackAction {...props} />,
                 headerTitle: "",

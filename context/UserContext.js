@@ -1,9 +1,13 @@
 import React, { useState, useEffect, createContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as api from "./api";
+import axios from "axios";
 
 //notifications
 import { useNotifications } from "../hooks/useNotifications";
+import globals from "constants/globals";
+
+const data = globals.DATA;
 
 export const authContext = createContext();
 
@@ -17,18 +21,62 @@ function useProvideAuth() {
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasLoggedIn, setHasLoggedIn] = useState(false);
-
+  const [categories, setCategories] = useState([]);
+  const [services, setServices] = useState([]);
+  const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [isAppReady, setIsAppReady] = useState(false);
   const { expoPushToken, notification } = useNotifications();
+
+  axios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRROR", error);
+      const code = error.response.status;
+      switch (code) {
+        case 401:
+          logOut();
+      }
+      // Add your error handling logic here
+      // For example, you can show an error message to the user or redirect them to a specific page
+
+      return Promise.reject(error);
+    }
+  );
+
+  useEffect(() => {
+    const progressValue =
+      (services.length > 0 ? 0.25 : 0) +
+      (categories.length > 0 ? 0.25 : 0) +
+      (user ? 0.5 : 0);
+    setProgress(progressValue);
+    // if (progressValue >= 1) {
+    //   setIsAppReady(true);
+    // }
+  }, [services, categories, user]);
+
   useEffect(() => {
     const getSessionFromStorage = async () => {
       try {
-        const [user, token] = await Promise.all([
+        const [user, token, services, categories] = await Promise.all([
           AsyncStorage.getItem("user"),
           AsyncStorage.getItem("token"),
+          AsyncStorage.getItem("services"),
+          AsyncStorage.getItem("categories"),
         ]);
         if (user && token) {
           setUser(JSON.parse(user));
+
           setToken(token);
+        }
+        if (services && categories) {
+          setServices(JSON.parse(services));
+          setCategories(JSON.parse(categories));
+        } else {
+          await getServices(data, token);
+          await getCategories(data, token);
         }
       } catch (error) {
         console.error(error);
@@ -38,12 +86,12 @@ function useProvideAuth() {
     getSessionFromStorage();
   }, []);
 
-  useEffect(() => {
-    const checkSessionInterval = setInterval(() => {
-      if (token && user) checkSession();
-    }, 1000 * 60 * 30); // check session every minute
-    return () => clearInterval(checkSessionInterval);
-  }, [user, token]);
+  // useEffect(() => {
+  //   const checkSessionInterval = setInterval(() => {
+  //     if (token && user) checkSession();
+  //   }, 1000 * 60 * 30); // check session every minute
+  //   return () => clearInterval(checkSessionInterval);
+  // }, [user, token]);
 
   const loginWithPhone = async (emp_code, phone) => {
     try {
@@ -108,6 +156,8 @@ function useProvideAuth() {
     setIsLoading(true);
     AsyncStorage.removeItem("user");
     AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("services");
+    AsyncStorage.removeItem("categories");
     setUser(null);
     setToken(null);
     setIsLoading(false);
@@ -125,6 +175,42 @@ function useProvideAuth() {
     }
   };
 
+  const getCategories = async (dd, token) => {
+    const data = {
+      ...dd,
+      modelName:
+        "Frontend\\Plugins\\ApplicationService\\ApplicationServiceCategory",
+    };
+    try {
+      setIsLoading(true);
+      const response = await api.fetchData(data, token);
+      console.log(response.data.records.data);
+      setCategories(response.data.records.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+  const getServices = async (dd, token) => {
+    const data = {
+      ...dd,
+      modelName: "Frontend\\Plugins\\ApplicationService\\ApplicationService",
+    };
+
+    try {
+      setIsLoading(true);
+      const response = await api.fetchData(data, token);
+      setServices(response.data.records.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+
   return {
     user,
     token,
@@ -137,5 +223,10 @@ function useProvideAuth() {
     hasLoggedIn,
     expoPushToken,
     notification,
+    categories,
+    services,
+    isAppReady,
+    setIsAppReady,
+    progress,
   };
 }
