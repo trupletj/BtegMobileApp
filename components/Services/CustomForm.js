@@ -23,9 +23,7 @@ export default ({ formField, name }) => {
     formState: { errors, isValid },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("this is data ", data);
-  };
+  const onSubmit = (data) => {};
 
   const onChange = (arg) => {
     return {

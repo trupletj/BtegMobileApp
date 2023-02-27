@@ -21,7 +21,6 @@ const SingleServiceFormScreen = ({ route }) => {
   const { token } = useAuth();
   const [formFields, setFormFields] = useState([]);
   const { id } = route.params;
-  console.log(formFields);
   useEffect(() => {
     const dd = {
       ...data,

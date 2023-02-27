@@ -208,7 +208,6 @@ function useProvideAuth() {
       setIsLoading(true);
       const service_response = await api.fetchData(data, token);
 
-      console.log("service", data);
       setServices(service_response?.data?.records?.data || []);
       setIsLoading(false);
     } catch (error) {
@@ -220,7 +219,6 @@ function useProvideAuth() {
   const getServicesRoles = async (token) => {
     var default_data = JSON.parse(JSON.stringify(globals.DATA));
 
-    console.log(default_data, "orjiiiineee");
     default_data.filters.push({
       field_name: "role_id",
       filter_type: "=",

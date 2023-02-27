@@ -7,7 +7,6 @@ import { useAuth } from "../../hooks/useAuth";
 
 const QrScreen = () => {
   const { user } = useAuth();
-  console.log(user);
   return (
     <Layout style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <View style={{ backgroundColor: "white", padding: 10 }}>

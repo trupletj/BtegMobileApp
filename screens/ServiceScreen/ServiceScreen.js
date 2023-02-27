@@ -16,14 +16,11 @@ const ServiceScreen = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [filteredServices, setFilteredServices] = useState(services);
-  console.log("services : ", services);
-  console.log("categories : ", categories);
   useEffect(() => {
     // Filter services based on the selected category and search input value
     let updatedServices = services;
 
     if (selectedCategoryId) {
-      console.log("clicked >>>>>>>>>>", selectedCategoryId);
       updatedServices = updatedServices.filter(
         (service) => service.category_id === selectedCategoryId
       );
