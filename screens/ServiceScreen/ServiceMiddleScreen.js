@@ -46,6 +46,7 @@ const ServiceMiddleScreen = ({ route }) => {
     let aa = JSON.stringify(eval("`" + real_service_role + "`"));
     quest_data.filters.push(JSON.parse(aa));
     quest_data.modelName = service.model_path + "\\" + service.model_name;
+    console.log(quest_data);
     fetchData(quest_data, token);
   }, [service.id]);
 
