@@ -14,11 +14,13 @@ import { AntDesign } from "@expo/vector-icons";
 import globals from "constants/globals";
 import { useAuth } from "hooks/useAuth";
 import axios from "axios";
+const DATA_LIST = globals.DATA_LIST;
+
 const ServiceMiddleScreen = ({ route }) => {
   const navigation = useNavigation();
   const { service } = route.params;
 
-  const { service_roles, services, user, DATA_LIST, token } = useAuth();
+  const { service_roles, services, user, token } = useAuth();
 
   const [results, setResults] = useState([]);
   const fetchData = async (data, token) => {
@@ -33,20 +35,28 @@ const ServiceMiddleScreen = ({ route }) => {
     }).then(function (response) {
       if (response.data.records) {
         setResults(response?.data?.records?.data || []);
-      } else if (response) {
       }
       setLoading(false);
     });
   };
   useEffect(() => {
-    var quest_data = { ...DATA_LIST };
+    var quest_data = JSON.parse(JSON.stringify(DATA_LIST));
     let real_service_role =
       '{"field_name": "worker_id", "filter_type": "=", "filter_value": ${user.user.employee_id}}';
 
+    var filtered_role = service_roles.find(
+      (item) =>
+        parseInt(item.application_service_id) === parseInt(service.id) &&
+        parseInt(item.role_id) === parseInt(user.user.role_id)
+    );
     let aa = JSON.stringify(eval("`" + real_service_role + "`"));
+
+    if (filtered_role) {
+      aa = JSON.stringify(eval("`" + filtered_role.filter_options + "`"));
+    }
     quest_data.filters.push(JSON.parse(aa));
+    console.log(quest_data, service);
     quest_data.modelName = service.model_path + "\\" + service.model_name;
-    console.log(quest_data);
     fetchData(quest_data, token);
   }, [service.id]);
 
@@ -113,7 +123,7 @@ const ServiceMiddleScreen = ({ route }) => {
             </View>
           )}
           {!loading && (
-            <View>
+            <>
               <List data={results} renderItem={renderItem} />
               <View style={styles.buttonGroup}>
                 <TouchableOpacity
@@ -138,7 +148,7 @@ const ServiceMiddleScreen = ({ route }) => {
                   />
                 </TouchableOpacity>
               </View>
-            </View>
+            </>
           )}
         </Layout>
       </SafeAreaView>
@@ -162,7 +172,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   item: {
-    width: "50%",
+    width: "50%", // is 50% of container width
   },
   buttonGroup: {
     position: "absolute",
