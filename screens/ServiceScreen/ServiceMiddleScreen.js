@@ -33,6 +33,8 @@ const ServiceMiddleScreen = ({ route }) => {
     }).then(function (response) {
       if (response.data.records) {
         setResults(response?.data?.records?.data || []);
+      } else if (response) {
+        console.log(response.data.status);
       }
       setLoading(false);
     });
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   item: {
-    width: "50%", // is 50% of container width
+    width: "50%",
   },
   buttonGroup: {
     position: "absolute",
