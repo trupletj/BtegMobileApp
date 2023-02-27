@@ -20,9 +20,51 @@ const ServiceMiddleScreen = ({ route }) => {
   const navigation = useNavigation();
   const { service } = route.params;
 
-  const { service_roles, services, user, token } = useAuth();
+  const { service_roles, user, token } = useAuth();
 
   const [results, setResults] = useState([]);
+  const [dataRows, setDataRows] = useState([]);
+
+  useEffect(() => {
+    const asd = [
+      {
+        field_name: "application_service_id",
+        filter_type: "=",
+        filter_value: service.id,
+      },
+    ];
+    axios({
+      method: "POST",
+      url: `/api/custom/list`,
+      data: {
+        ...DATA_LIST,
+        modelName:
+          "Frontend\\Plugins\\ApplicationService\\ApplicationServiceDataRows",
+        filters: asd,
+      },
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(function (response) {
+      if (response.data.records) {
+        let aa = response.data.records.data;
+        let newArray = [];
+
+        aa.filter(function (el) {
+          if (el.browse == 1) {
+            let newObject = {};
+            newObject["field"] = el.field;
+            newObject["label"] = el.display_name;
+            newArray.push(newObject);
+          }
+        });
+        setDataRows(newArray || []);
+      } else alert("error");
+      setLoading(false);
+    });
+  }, []);
+
   const fetchData = async (data, token) => {
     axios({
       method: "POST",
@@ -83,16 +125,20 @@ const ServiceMiddleScreen = ({ route }) => {
     </View>
   );
   const renderItem = ({ item, index }) => (
-    <Card style={styles.card} header={Header} footer={Footer}>
-      <Text>{JSON.stringify(item)}</Text>
-      <View style={styles.tableContainer}>
-        <View style={styles.item}>
-          <Text>Header</Text>
-        </View>
-        <View style={styles.item}>
-          <Text>data</Text>
-        </View>
-      </View>
+    <Card style={styles.card} footer={Footer}>
+      {dataRows.map((row, index) => {
+        return (
+          <View key={index} style={styles.tableContainer}>
+            <View style={styles.item}>
+              <Text>{row.label}</Text>
+            </View>
+            <View style={styles.item}>
+              <Text>{item[row.field]}</Text>
+            </View>
+          </View>
+        );
+      })}
+
       <View style={styles.tableContainer}>
         <View style={styles.item}>
           <Text>Header</Text>
