@@ -7,7 +7,7 @@ import axios from "axios";
 import { useNotifications } from "../hooks/useNotifications";
 import globals from "constants/globals";
 
-const data = globals.DATA;
+const data = { ...globals.DATA };
 const DATA_LIST = globals.DATA_LIST;
 
 export const authContext = createContext();
@@ -35,7 +35,7 @@ function useProvideAuth() {
       return response;
     },
     (error) => {
-      console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRROR", error);
+      console.error("ERRRRRRRRRRRRRRRRRRRRRRRRRRROR", error);
       const code = error.response.status;
       switch (code) {
         case 401:
@@ -57,7 +57,7 @@ function useProvideAuth() {
     // if (progressValue >= 1) {
     //   setIsAppReady(true);
     // }
-  }, [services, categories, user]);
+  }, [services, categories, user, service_roles]);
 
   const getSessionFromStorage = async () => {
     try {
@@ -84,14 +84,13 @@ function useProvideAuth() {
 
   useEffect(() => {
     if (token) {
-      getServices(data, token);
-      getCategories(data, token);
-      console.log("token changes", token);
+      getServices(token);
+      getCategories(token);
+      getServicesRoles(token);
     }
   }, [token]);
   useEffect(() => {
     getSessionFromStorage();
-    console.log("check token");
   }, []);
 
   // useEffect(() => {
@@ -174,7 +173,6 @@ function useProvideAuth() {
   const checkSession = async () => {
     try {
       const response = await api.checkSession(token);
-      console.log("==status==", response.status);
       if (response.status !== 200) {
         logOut();
       }
@@ -183,17 +181,16 @@ function useProvideAuth() {
     }
   };
 
-  const getCategories = async (dd, token) => {
+  const getCategories = async (token) => {
     const data = {
-      ...dd,
+      ...JSON.parse(JSON.stringify(globals.DATA)),
       modelName:
         "Frontend\\Plugins\\ApplicationService\\ApplicationServiceCategory",
     };
     try {
       setIsLoading(true);
-      const response = await api.fetchData(data, token);
-      console.log(response.data.records.data);
-      setCategories(response.data.records.data);
+      const categories_response = await api.fetchData(data, token);
+      setCategories(categories_response?.data?.records?.data || []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -201,16 +198,18 @@ function useProvideAuth() {
       setIsLoading(false);
     }
   };
-  const getServices = async (dd, token) => {
+  const getServices = async (token) => {
     const data = {
-      ...dd,
+      ...JSON.parse(JSON.stringify(globals.DATA)),
       modelName: "Frontend\\Plugins\\ApplicationService\\ApplicationService",
     };
 
     try {
       setIsLoading(true);
-      const response = await api.fetchData(data, token);
-      setServices(response.data.records.data);
+      const service_response = await api.fetchData(data, token);
+
+      console.log("service", data);
+      setServices(service_response?.data?.records?.data || []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -218,16 +217,16 @@ function useProvideAuth() {
       setIsLoading(false);
     }
   };
-  const getServicesRoles = async (dd, token) => {
-    var default_data = { ...dd };
+  const getServicesRoles = async (token) => {
+    var default_data = JSON.parse(JSON.stringify(globals.DATA));
 
+    console.log(default_data, "orjiiiineee");
     default_data.filters.push({
-      field_name: "application_service_id",
+      field_name: "role_id",
       filter_type: "=",
       filter_value: user?.user?.role_id || 0,
     });
 
-   
     const data = {
       ...default_data,
       modelName:
@@ -235,8 +234,9 @@ function useProvideAuth() {
     };
     try {
       setIsLoading(true);
-      const response = await api.fetchData(data, token);
-      setServiceRoles(response.data.records.data);
+      const roles_response = await api.fetchData(data, token);
+
+      setServiceRoles(roles_response?.data?.records?.data || []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
