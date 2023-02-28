@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "hooks/useAuth";
 //screens
 import ServiceScreen from "screens/ServiceScreen/ServiceScreen";
-import RequistScreen from "screens/RequistScreen/RequistScreen";
+import RequestScreen from "screens/RequestScreen/RequestScreen";
 import globals from "constants/globals";
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -122,7 +122,7 @@ const AppTabScreen = () => {
           tabBar={(props) => <BottomTabBar {...props} />}
         >
           <Screen name="Service" component={ServiceScreen} />
-          <Screen name="Requist" component={RequistScreen} />
+          <Screen name="Request" component={RequestScreen} />
         </Navigator>
       </SafeAreaView>
     </Layout>

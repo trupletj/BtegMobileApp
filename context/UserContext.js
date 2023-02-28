@@ -6,6 +6,22 @@ import axios from "axios";
 //notifications
 import { useNotifications } from "../hooks/useNotifications";
 import globals from "constants/globals";
+//fonts
+import {
+  useFonts,
+  SourceSansPro_200ExtraLight,
+  SourceSansPro_200ExtraLight_Italic,
+  SourceSansPro_300Light,
+  SourceSansPro_300Light_Italic,
+  SourceSansPro_400Regular,
+  SourceSansPro_400Regular_Italic,
+  SourceSansPro_600SemiBold,
+  SourceSansPro_600SemiBold_Italic,
+  SourceSansPro_700Bold,
+  SourceSansPro_700Bold_Italic,
+  SourceSansPro_900Black,
+  SourceSansPro_900Black_Italic,
+} from "@expo-google-fonts/source-sans-pro";
 
 const data = { ...globals.DATA };
 const DATA_LIST = globals.DATA_LIST;
@@ -18,6 +34,20 @@ export function ProvideAuth({ children }) {
 }
 
 function useProvideAuth() {
+  let [fontsLoaded] = useFonts({
+    SourceSansPro_200ExtraLight,
+    SourceSansPro_200ExtraLight_Italic,
+    SourceSansPro_300Light,
+    SourceSansPro_300Light_Italic,
+    SourceSansPro_400Regular,
+    SourceSansPro_400Regular_Italic,
+    SourceSansPro_600SemiBold,
+    SourceSansPro_600SemiBold_Italic,
+    SourceSansPro_700Bold,
+    SourceSansPro_700Bold_Italic,
+    SourceSansPro_900Black,
+    SourceSansPro_900Black_Italic,
+  });
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,39 +78,29 @@ function useProvideAuth() {
     }
   );
 
-  useEffect(() => {
-    const progressValue =
-      (services.length > 0 ? 0.25 : 0) +
-      (categories.length > 0 ? 0.25 : 0) +
-      (user ? 0.5 : 0);
-    setProgress(progressValue);
-    // if (progressValue >= 1) {
-    //   setIsAppReady(true);
-    // }
-  }, [services, categories, user, service_roles]);
-
   const getSessionFromStorage = async () => {
     try {
       const [user, token] = await Promise.all([
         AsyncStorage.getItem("user"),
         AsyncStorage.getItem("token"),
       ]);
-
-      setUser(JSON.parse(user));
-      setToken(token);
-      // if (services && categories && service_roles) {
-      //   setServices(JSON.parse(services));
-      //   setCategories(JSON.parse(categories));
-      //   // setServiceRoles(JSON.parse(service_roles));
-      // } else {
-      //   await getServices(data, token);
-      //   await getCategories(data, token);
-      //   // await getServicesRoles(data, token);
-      // }
+      if (user && token) {
+        setUser(JSON.parse(user));
+        setToken(token);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("error from getSessionFronStorage", error);
     }
   };
+
+  useEffect(() => {
+    getSessionFromStorage();
+
+    const timer = setTimeout(() => {
+      setIsAppReady(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -89,16 +109,6 @@ function useProvideAuth() {
       getServicesRoles(token);
     }
   }, [token]);
-  useEffect(() => {
-    getSessionFromStorage();
-  }, []);
-
-  // useEffect(() => {
-  //   const checkSessionInterval = setInterval(() => {
-  //     if (token && user) checkSession();
-  //   }, 1000 * 60 * 30); // check session every minute
-  //   return () => clearInterval(checkSessionInterval);
-  // }, [user, token]);
 
   const loginWithPhone = async (emp_code, phone) => {
     try {
@@ -163,21 +173,21 @@ function useProvideAuth() {
     setIsLoading(true);
     AsyncStorage.removeItem("user");
     AsyncStorage.removeItem("token");
-    AsyncStorage.removeItem("services");
-    AsyncStorage.removeItem("categories");
     setUser(null);
     setToken(null);
     setIsLoading(false);
   };
 
   const checkSession = async () => {
-    try {
-      const response = await api.checkSession(token);
-      if (response.status !== 200) {
-        logOut();
+    if (token) {
+      try {
+        const response = await api.checkSession(token);
+        if (response.status !== 200) {
+          logOut();
+        }
+      } catch (error) {
+        console.error("check session error", error);
       }
-    } catch (error) {
-      console.error("check session error", error);
     }
   };
 
@@ -208,6 +218,7 @@ function useProvideAuth() {
       setIsLoading(true);
       const service_response = await api.fetchData(data, token);
 
+      console.log("service", data);
       setServices(service_response?.data?.records?.data || []);
       setIsLoading(false);
     } catch (error) {
@@ -219,6 +230,7 @@ function useProvideAuth() {
   const getServicesRoles = async (token) => {
     var default_data = JSON.parse(JSON.stringify(globals.DATA));
 
+    console.log(default_data, "orjiiiineee");
     default_data.filters.push({
       field_name: "role_id",
       filter_type: "=",
@@ -263,5 +275,7 @@ function useProvideAuth() {
     service_roles,
     data,
     DATA_LIST,
+    error,
+    fontsLoaded,
   };
 }

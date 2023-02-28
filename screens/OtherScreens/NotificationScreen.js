@@ -28,12 +28,11 @@ const data = {
 };
 
 const NotificationScreen = () => {
-  const [notifications, setNotifications] = useState();
+  const [notifications, setNotifications] = useState([]);
   const { token } = useAuth();
   useEffect(() => {
     getNotifications(data, token);
   }, []);
-
   const getNotifications = async (data, token) => {
     try {
       const response = await fetchData(data, token);
@@ -46,27 +45,28 @@ const NotificationScreen = () => {
   const renderItem = ({ item, index }) => (
     <ListItem
       title={`${item.title} `}
-      // description="desc"
       description={`${item.body} ${index + 1}`}
     />
   );
 
-  if (notifications)
+  if (notifications.length === 0)
     return (
-      <Layout style={{ flex: 1 }}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <List
-            style={styles.container}
-            data={notifications}
-            ItemSeparatorComponent={Divider}
-            renderItem={renderItem}
-          />
-        </SafeAreaView>
+      <Layout
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <Text>Мэдэгдэл ирээгүй байна</Text>
       </Layout>
     );
   return (
-    <Layout>
-      <Text>jk</Text>
+    <Layout style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <List
+          style={styles.container}
+          data={notifications}
+          ItemSeparatorComponent={Divider}
+          renderItem={renderItem}
+        />
+      </SafeAreaView>
     </Layout>
   );
 };

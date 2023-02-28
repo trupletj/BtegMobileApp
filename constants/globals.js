@@ -19,8 +19,6 @@ module.exports = {
     relations: [],
     select: "*",
     filters: [],
-    page: 1,
-    perPage: 25,
     orders: [{ field_name: "id", order_type: "desc" }],
     globalSearch: [],
     dataloaded: 0,

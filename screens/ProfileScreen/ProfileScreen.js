@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import React from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
@@ -13,13 +13,16 @@ import {
 } from "@ui-kitten/components";
 
 const ProfileScreen = () => {
-  const { logOut, user, token } = useAuth();
+  const { logOut, user } = useAuth();
   const navigation = useNavigation();
   if (user)
     return (
       <Layout style={styles.container}>
-        <ScrollView style={{ flex: 1 }}>
-          <Avatar size="large" source={require("assets/avatar.png")} />
+        <SafeAreaView style={{ flex: 1 }}>
+          <Layout style={{ justifyContent: "center", alignItems: "center" }}>
+            <Avatar size="large" source={require("assets/avatar.png")} />
+          </Layout>
+
           <ListItem title="ОВОГ" description={user.last_name} />
           <Divider />
           <ListItem title="НЭР" description={user.first_name} />
@@ -30,9 +33,7 @@ const ProfileScreen = () => {
           <Divider />
           <ListItem title="АЛБА" description={user.department_name} />
           <Divider />
-          <ListItem title="TOKEN" description={token} />
-          <Divider />
-
+          <ListItem title="УТАС" description={user.phone} />
           <Button
             appearance="outline"
             status="danger"
@@ -41,7 +42,7 @@ const ProfileScreen = () => {
           >
             LogOut
           </Button>
-        </ScrollView>
+        </SafeAreaView>
       </Layout>
     );
   else

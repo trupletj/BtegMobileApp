@@ -32,10 +32,8 @@ export default SearchBar;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginHorizontal: 10,
   },
   input: {
     flex: 1,
-    margin: 2,
   },
 });

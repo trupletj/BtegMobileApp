@@ -1,12 +1,5 @@
+import { StyleSheet, TouchableWithoutFeedback, Keyboard } from "react-native";
 import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import {
-  IndexPath,
   Input,
   Button,
   Layout,
@@ -22,7 +15,7 @@ import globals from "constants/globals";
 import { useNavigation } from "@react-navigation/native";
 
 const LoginConfirmPhone = ({ route }) => {
-  const [code, setCode] = useState("069983");
+  const [code, setCode] = useState();
 
   const navigation = useNavigation();
   const { loginConfirmCode, user, isLoading } = useAuth();

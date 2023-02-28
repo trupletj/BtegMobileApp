@@ -45,18 +45,14 @@ const ServiceScreen = () => {
 
   return (
     <Layout style={styles.container} level="2">
-      <Divider style={styles.divider} />
-
+      <SearchBar value={searchInputValue} onChange={handleSearchInputChange} />
       <Category
         categories={categories}
         handleCategorySelect={handleCategorySelect}
         selectedCategoryId={selectedCategoryId}
       />
       <Divider style={styles.divider} />
-
-      <SearchBar value={searchInputValue} onChange={handleSearchInputChange} />
-      <Divider style={styles.divider} />
-
+      <Text style={{ margin: 10 }}>Үйлчилгээний жагсаалт</Text>
       <ServiceList services={filteredServices} />
     </Layout>
   );

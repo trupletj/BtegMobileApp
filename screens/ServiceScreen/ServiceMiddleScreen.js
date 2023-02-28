@@ -21,7 +21,7 @@ const ServiceMiddleScreen = ({ route }) => {
   const { service } = route.params;
 
   const { service_roles, user, token } = useAuth();
-
+  const [loading, setLoading] = useState(true);
   const [results, setResults] = useState([]);
   const [dataRows, setDataRows] = useState([]);
 
@@ -97,12 +97,13 @@ const ServiceMiddleScreen = ({ route }) => {
       aa = JSON.stringify(eval("`" + filtered_role.filter_options + "`"));
     }
     quest_data.filters.push(JSON.parse(aa));
+    quest_data.page = 1;
+    quest_data.perPage = 2;
     console.log(quest_data, service);
     quest_data.modelName = service.model_path + "\\" + service.model_name;
     fetchData(quest_data, token);
   }, [service.id]);
 
-  const [loading, setLoading] = useState(true);
   const handleConfirm = () => {
     navigation.navigate("SingleServiceForm", { id: service.id });
   };
@@ -138,15 +139,6 @@ const ServiceMiddleScreen = ({ route }) => {
           </View>
         );
       })}
-
-      <View style={styles.tableContainer}>
-        <View style={styles.item}>
-          <Text>Header</Text>
-        </View>
-        <View style={styles.item}>
-          <Text>data</Text>
-        </View>
-      </View>
     </Card>
   );
   return (
