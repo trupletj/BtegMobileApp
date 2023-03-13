@@ -25,31 +25,35 @@ const ServiceMiddleScreen = ({ route }) => {
   const [results, setResults] = useState([]);
   const [dataRows, setDataRows] = useState([]);
 
-  useEffect(() => {
-    const asd = [
-      {
-        field_name: "application_service_id",
-        filter_type: "=",
-        filter_value: service.id,
-      },
-    ];
-    axios({
-      method: "POST",
-      url: `/api/custom/list`,
-      data: {
-        ...DATA_LIST,
-        modelName:
-          "Frontend\\Plugins\\ApplicationService\\ApplicationServiceDataRows",
-        filters: asd,
-      },
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(function (response) {
+  const getDataRows = async () => {
+    setLoading(true);
+    console.log("API calling");
+    try {
+      const asd = [
+        {
+          field_name: "application_service_id",
+          filter_type: "=",
+          filter_value: service.id,
+        },
+      ];
+      const response = await axios({
+        method: "POST",
+        url: `/api/custom/list`,
+        data: {
+          ...DATA_LIST,
+          modelName:
+            "Frontend\\Plugins\\ApplicationService\\ApplicationServiceDataRows",
+          filters: asd,
+        },
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (response.data.records) {
-        let aa = response.data.records.data;
         let newArray = [];
+        let aa = response.data.records.data;
 
         aa.filter(function (el) {
           if (el.browse == 1) {
@@ -59,29 +63,18 @@ const ServiceMiddleScreen = ({ route }) => {
             newArray.push(newObject);
           }
         });
+        console.log("API call Done!");
         setDataRows(newArray || []);
-      } else alert("error");
-      setLoading(false);
-    });
-  }, []);
-
-  const fetchData = async (data, token) => {
-    axios({
-      method: "POST",
-      url: `/api/custom/list`,
-      data,
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(function (response) {
-      if (response.data.records) {
-        setResults(response?.data?.records?.data || []);
+        setLoading(false);
+      } else {
+        console.log("API call failed");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await getDataRows();
       }
-      setLoading(false);
-    });
+    } catch (error) {}
   };
-  useEffect(() => {
+
+  const fetchData = async () => {
     var quest_data = JSON.parse(JSON.stringify(DATA_LIST));
     let real_service_role =
       '{"field_name": "worker_id", "filter_type": "=", "filter_value": ${user.user.employee_id}}';
@@ -99,9 +92,35 @@ const ServiceMiddleScreen = ({ route }) => {
     quest_data.filters.push(JSON.parse(aa));
     quest_data.page = 1;
     quest_data.perPage = 2;
-    console.log(quest_data, service);
     quest_data.modelName = service.model_path + "\\" + service.model_name;
-    fetchData(quest_data, token);
+    console.log("FetchData called!");
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/api/custom/list`,
+        data: quest_data,
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.records) {
+        console.log("FetchData call successful!", response.data.records.data);
+
+        setResults(response.data.records.data);
+        setLoading(false);
+      } else {
+        console.log("FetchData call failed!");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await fetchData();
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+  useEffect(() => {
+    getDataRows();
+    fetchData();
   }, [service.id]);
 
   const handleConfirm = () => {
@@ -210,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   item: {
-    width: "50%", // is 50% of container width
+    width: "50%",
   },
   buttonGroup: {
     position: "absolute",

@@ -7,21 +7,6 @@ import axios from "axios";
 import { useNotifications } from "../hooks/useNotifications";
 import globals from "constants/globals";
 //fonts
-import {
-  useFonts,
-  SourceSansPro_200ExtraLight,
-  SourceSansPro_200ExtraLight_Italic,
-  SourceSansPro_300Light,
-  SourceSansPro_300Light_Italic,
-  SourceSansPro_400Regular,
-  SourceSansPro_400Regular_Italic,
-  SourceSansPro_600SemiBold,
-  SourceSansPro_600SemiBold_Italic,
-  SourceSansPro_700Bold,
-  SourceSansPro_700Bold_Italic,
-  SourceSansPro_900Black,
-  SourceSansPro_900Black_Italic,
-} from "@expo-google-fonts/source-sans-pro";
 
 const data = { ...globals.DATA };
 const DATA_LIST = globals.DATA_LIST;
@@ -34,30 +19,15 @@ export function ProvideAuth({ children }) {
 }
 
 function useProvideAuth() {
-  let [fontsLoaded] = useFonts({
-    SourceSansPro_200ExtraLight,
-    SourceSansPro_200ExtraLight_Italic,
-    SourceSansPro_300Light,
-    SourceSansPro_300Light_Italic,
-    SourceSansPro_400Regular,
-    SourceSansPro_400Regular_Italic,
-    SourceSansPro_600SemiBold,
-    SourceSansPro_600SemiBold_Italic,
-    SourceSansPro_700Bold,
-    SourceSansPro_700Bold_Italic,
-    SourceSansPro_900Black,
-    SourceSansPro_900Black_Italic,
-  });
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasLoggedIn, setHasLoggedIn] = useState(false);
+  const [isAppReady, setIsAppReady] = useState(false);
+  const [isUserActive, setIsUserActive] = useState(false);
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
   const [service_roles, setServiceRoles] = useState([]);
   const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [isAppReady, setIsAppReady] = useState(false);
   const { expoPushToken, notification } = useNotifications();
 
   axios.interceptors.response.use(
@@ -65,12 +35,37 @@ function useProvideAuth() {
       return response;
     },
     (error) => {
-      console.error("ERRRRRRRRRRRRRRRRRRRRRRRRRRROR", error);
-      const code = error.response.status;
-      switch (code) {
-        case 401:
-          logOut();
+      if (error.message === "Network Error") {
+        setError({
+          message: "Сервертэй холбогдоход алдаа гарлаа",
+          status: 500,
+        });
+        return Promise.reject(error);
       }
+      if (error.response.status === 401) {
+        setError({
+          message: "Та нэвтрэх эрхгүй байна",
+          status: 401,
+        });
+        return Promise.reject(error);
+      }
+      if (error.response.status === 419) {
+        setError({
+          message: "Та нэвтрэх эрхгүй байна",
+          status: 419,
+        });
+        return Promise.reject(error);
+      }
+    }
+  );
+  axios.interceptors.request.use(
+    (request) => {
+      console.log("Axios interceptors request !!!!", request.data);
+      return request;
+    },
+    (error) => {
+      console.log("Axios interceptors request error", error);
+
       // Add your error handling logic here
       // For example, you can show an error message to the user or redirect them to a specific page
 
@@ -87,13 +82,31 @@ function useProvideAuth() {
       if (user && token) {
         setUser(JSON.parse(user));
         setToken(token);
+        checkSession();
       }
     } catch (error) {
-      console.error("error from getSessionFronStorage", error);
+      console.error("error from getSessionFronStorage in UserContext", error);
+    }
+  };
+  const checkSession = async () => {
+    console.log("called checkSession in UserContext");
+    if (token) {
+      try {
+        const response = await api.checkSession(token);
+        if (response.status !== 200) {
+          logOut();
+        } else {
+          setIsUserActive(true);
+        }
+      } catch (error) {
+        setError(error);
+        logOut();
+      }
     }
   };
 
   useEffect(() => {
+    checkSession();
     getSessionFromStorage();
 
     const timer = setTimeout(() => {
@@ -103,12 +116,14 @@ function useProvideAuth() {
   }, []);
 
   useEffect(() => {
-    if (token) {
+    console.log("called useEffect in UserContext");
+    if (token) checkSession();
+    if (token && isUserActive) {
       getServices(token);
       getCategories(token);
       getServicesRoles(token);
     }
-  }, [token]);
+  }, [token, setIsUserActive, isUserActive]);
 
   const loginWithPhone = async (emp_code, phone) => {
     try {
@@ -134,6 +149,7 @@ function useProvideAuth() {
           JSON.stringify(response.data.user.employee)
         );
         await AsyncStorage.setItem("token", response.data.accessToken);
+        setIsUserActive(true);
         setIsLoading(false);
       } else {
         // Retry the API call after a delay
@@ -162,6 +178,8 @@ function useProvideAuth() {
         JSON.stringify(response.data.user.employee)
       );
       await AsyncStorage.setItem("token", response.data.token);
+      setIsUserActive(true);
+
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -175,20 +193,8 @@ function useProvideAuth() {
     AsyncStorage.removeItem("token");
     setUser(null);
     setToken(null);
+    setIsUserActive(false);
     setIsLoading(false);
-  };
-
-  const checkSession = async () => {
-    if (token) {
-      try {
-        const response = await api.checkSession(token);
-        if (response.status !== 200) {
-          logOut();
-        }
-      } catch (error) {
-        console.error("check session error", error);
-      }
-    }
   };
 
   const getCategories = async (token) => {
@@ -256,6 +262,7 @@ function useProvideAuth() {
   };
 
   return {
+    isAppReady,
     user,
     token,
     isLoading,
@@ -264,18 +271,13 @@ function useProvideAuth() {
     loginConfirmCode,
     logOut,
     checkSession,
-    hasLoggedIn,
     expoPushToken,
     notification,
     categories,
     services,
-    isAppReady,
-    setIsAppReady,
-    progress,
     service_roles,
     data,
     DATA_LIST,
     error,
-    fontsLoaded,
   };
 }
